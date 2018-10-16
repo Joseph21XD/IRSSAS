@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/header %>
+  </head>
+  <body>
+    <div class="menu">
+     <div class="menu_item"><a href="https://www.aya.go.cr/SitePages/Principal.aspx"><img class="menu_image" src="images/tec.png" alt=""></a></div>
+      <div class="menu_item"><a href="https://www.aya.go.cr/SitePages/Principal.aspx"><H1>Proyecto IRSSAS</H1></a></div>
+     <div class="menu_item_block">
+      <form class="menu_form" method="post">
+        <div class="menu_item"><input type="text" name="usr" placeholder="Usuario">
+          <p style="color: #f00;"><%= error%></p></div>
+        <div class="menu_item"><input type="password" name="pwd" placeholder="Contraseña"></div>
+        <div class="menu_item"><input class="login_button" type="submit" name="button" value="Ingresar"></div>
+      </form>
+      </div>
+    </div>
+    <div class="lateral">
+       <h1 id="myh1">Componentes</h1>
+       <h1 id="var1" hidden=""><%= var1%></h1>
+       <h1 id="var2" hidden=""><%= var2%></h1>
+            <ul class="mainmenu">
+              <li><a href=""><i class="fa fa-tint"></i> Saneamiento</a>
+              <ul class="submenu">
+                <li><a href="/1"> Gestión de Aguas Residuales</a></li>
+                <li><a href=""> Gestión de Residuos Sólidos</a></li>
+                <li><a href=""> Porcentaje Toneladas/Cantón</a></li>
+              </ul>
+              </li>
+              <li><a href=""><i class="fa fa-tint"></i> Gestión del Recurso Hídrico</a>
+                <ul class="submenu">
+                  <li><a href=""> Gestión de Protección del Recurso Hídrico</a></li>
+                  <li><a href=""> Calidad de Agua Potable</a></li>
+                  <li><a href=""> Gestión Administrativo/Financiero</a></li>
+                </ul>
+              </li>
+              <li><a href=""><i class="fa fa-tint"></i> Índice de Desarrollo</a></li>
+              <li><a href=""><i class="fa fa-tint"></i> Educación</a></li>
+              <li><a href=""><i class="fa fa-tint"></i> IRSSAs</a></li>
+            </ul>
+    </div>
+    <div id="map"></div>
+    <script src="scripts/map2.js"></script>
+  </body>
+</html>

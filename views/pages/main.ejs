@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/header %>
+  </head>
+  <body>
+        <div class="menu">
+     <div class="menu_item"><a href="https://www.aya.go.cr/SitePages/Principal.aspx"><img class="menu_image" src="images/tec.png" alt=""></a></div>
+      <div class="menu_item"><a href="https://www.aya.go.cr/SitePages/Principal.aspx"><H1>Proyecto IRSSAS</H1></a></div>
+      <div class="menu_item_block">
+      <form class="menu_form" action="/">
+        <div class="menu_item"><input class="login_button" type="submit" name="button" value="Cerrar Sesión"></div>
+      </form>
+      </div>
+    </div>
+    <div class="main">
+      <div class="main_table">
+        <table>
+          <thead>
+            <th>Nombre</th>
+            <th>Localización</th>
+            <th>Información</th>
+          </thead>
+          <% rows.forEach(function(asada) { %>
+          <tr>
+              <td><%= asada.nombre %></td>
+              <td><%= asada.distrito%>, <%= asada.canton%>, <%= asada.provincia%></td>
+              <td><a href="/asada/<%= asada.codigo%>"" ><img class="image_table" src="images/info.png"></a></td>  
+          </tr>
+          <% }); %>
+        </table>
+      </div>
+      <div class="main_lateral">
+      	<ul class="mainmenu">
+              <li><a href="/visor"><i class="fa fa-eye"></i> Visor</a></li>
+              <li><a href="/main"><i class="fa fa-tint"></i>Agregar Asada</a></li>
+            </ul>       
+      </div>
+    </div>
+
+  </body>
+</html>
