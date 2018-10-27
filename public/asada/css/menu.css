@@ -2,14 +2,14 @@
 	box-sizing: border-box;
 }
 html,body{
-	font-family: 'Helvetica', sans-serif;
+	font-family: 'Open Sans', sans-serif;
 	height: 100%;
     margin: 0;
     padding: 0;
 }
 
 .menu{
-	background-color: rgb(0, 40, 85);
+	background-color: rgb(0, 83, 155);
 	padding: 1em;
 	position: absolute;
 	top: 0;
@@ -42,7 +42,8 @@ html,body{
 	padding: 10px;
 	margin: 0;
 	height: 75px;
-	width: 167px;
+	width: 75px;
+	border-radius: 30px;
 }
 .menu_item{
 	float: left;
@@ -63,13 +64,12 @@ html,body{
 .menu_form .menu_item{
 	padding-right: 10px;
 }
-input[type="text"], input[type="password"]{
+input[type="text"]{
 	margin-bottom: 10px;
 	margin-top: 10px;
 	display: block;
 	border-radius: 5px;
-	border: solid;
-	border-color: #012A60;
+	border: none;
 }
 
 
@@ -84,13 +84,14 @@ input[type="text"], input[type="password"]{
 	transition: all 500ms ease;
   }
   .login_button:hover{
-    background: rgba(0,73,155);
+    background: rgba(0,0,0,0);
 	color: #012A60;
 	box-shadow: inset 0 0 0 3px #012A60;
   }
 
   a{
   	text-decoration: none;
+
   }
   a:link, a:visited{
   	color: #fff;
@@ -112,7 +113,7 @@ input[type="text"], input[type="password"]{
 }
 
 .mainmenu a:hover {
-    background-color: rgb(0, 40, 85);
+    background-color: rgb(0, 83, 155);
 }
 
 .mainmenu li:hover .submenu {
@@ -120,16 +121,17 @@ input[type="text"], input[type="password"]{
   max-height: 200px;
 }
 
-.lateral h1, .main_lateral h1{
+.lateral h1{
 	color: #fff;
-	padding: 20px;
+	padding: 10px;
+	margin-left: 50px;
 }
 .submenu a {
   background-color: #021d40;
 }
 
 .submenu a:hover {
-  background-color: rgb(0, 40, 85);
+  background-color: rgb(0, 83, 155);
 }
 
 .submenu {
@@ -160,7 +162,6 @@ table{
 	width: 100%;
 	color: #012A60;
 }
-
 
 th, td{
 
@@ -202,13 +203,8 @@ thead{
     background-color:  #012A60;
 }
 
-
-
-
-
-
 .menu_nav{
-	background-color: rgb(0, 40, 85);
+	background-color: rgb(0, 83, 155);
 	display:block;
 	height: 50px;
 }
@@ -274,10 +270,3 @@ color:#797979;
 	display: inline-block;
 }
 
-.fa-info-circle {
-  color:  rgb(0, 40, 85);
-}
-
-.fa-info-circle:hover {
-  color: white;
-}

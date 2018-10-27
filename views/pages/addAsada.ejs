@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/header %>
+  </head>
+  <body>
+    <header>
+     <% include ../partials/mainHeader %>
+    </header>
+    <div class="main" style="overflow: auto;">
+      <form method="post">
+      <h2>Código de la Asada</h2>
+      <input type="number" name="ident" id="ident">
+      <h2>Nombre de la Asada</h2>
+      <input type="text" name="nom" id="nom">
+      <h2>Sitio de la Asada</h2>
+      <select id="site" name="site">
+        <% rows.forEach(function(distrito) { %>
+        <option value="<%=distrito.idd%>-<%=distrito.idc%>-<%=distrito.idp%>"><%=distrito.distrito%>, <%=distrito.canton%>, <%=distrito.provincia%></option>
+        <% }); %>
+      </select>
+      <br>
+      <br>
+      <input type="submit" name="btnsubmit">
+      </form>
+    </div>
+    <div class="main_lateral">
+      <% include ../partials/nav %>       
+    </div>
+
+  </body>
+</html>

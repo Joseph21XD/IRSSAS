@@ -161,11 +161,14 @@ table{
 	color: #012A60;
 }
 
-
 th, td{
 
 	padding: 10px;
 	text-align: center;
+}
+
+td_a{
+	color: rgb(0, 40, 85);
 }
 
 tr:hover {
@@ -178,25 +181,22 @@ thead{
 }
 
 .main_table{
-	position: absolute; 
-	top: 0;
-	bottom: 0;
-	left: 0;
 	width: 75%;
 	height: 100%;
-	margin-top: 100px;
+
 	justify-content: center;
     align-items: center;
 }
 
 .main_lateral{
 	position: absolute; 
-	top: 0;
-	bottom: 0;
-	right: 0;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
 	width: 25%;
 	height: 100%;
 	margin-top: 100px;
+	padding-bottom: 20px;
 	justify-content: center;
     align-items: center;
     background-color:  #012A60;

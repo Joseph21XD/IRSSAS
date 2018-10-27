@@ -4,25 +4,19 @@
     <% include ../partials/header %>
   </head>
   <body>
-     <div class="menu">
-     <div class="menu_item"><a href="https://www.aya.go.cr/SitePages/Principal.aspx"><img class="menu_image" src="images/tec.png" alt=""></a></div>
-      <div class="menu_item"><a href="https://www.aya.go.cr/SitePages/Principal.aspx"><H1>Proyecto IRSSAS</H1></a></div>
-      <div class="menu_item_block">
-      <form class="menu_form" action="/main">
-      <div class="menu_item"><input class="login_button" type="submit" name="button" value="Cerrar Sesión"></div>
-      </form>
-      </div>
-    </div>
-    <div class="main">
-      <h1><%= rows[0].nombre%></h1>
-      <h2>2018</h2>
+    <header>
+     <% include ../partials/mainHeader %>
+    </header>
+    <div class="main" style="overflow: auto;">
       <div class="main_table">
+      <h1 style="color: rgb(0, 40, 85); padding-left: 10px;"><%= rows[0].nombre%></h1>
+      <h2 style="color: rgb(0, 40, 85); padding-left: 10px;">2018</h2>
         <table>
           <thead>
             <th>Pregunta</th>
             <th>Respuesta</th>
           </thead>
-          <% resp.forEach(function(asada) { %>
+          <% rows.forEach(function(asada) { %>
           <tr>
               <td><%= asada.detalle %></td>
               <td><%= asada.texto%></td>
@@ -30,13 +24,11 @@
           <% }); %>
         </table>
       </div>
-      <div class="main_lateral">
-      	<ul class="mainmenu">
-              <li><a href="/"><i class="fa fa-eye"></i> Visor</a></li>
-              <li><a href="/main"><i class="fa fa-tint"></i>Agregar Asada</a></li>
-            </ul>       
       </div>
-    </div>
+
+      <div class="main_lateral">
+      	<% include ../partials/nav %>       
+      </div>
 
   </body>
 </html>
