@@ -178,13 +178,9 @@ thead{
 }
 
 .main_table{
-	position: absolute; 
-	top: 0;
-	bottom: 0;
-	left: 0;
 	width: 75%;
 	height: 100%;
-	margin-top: 100px;
+
 	justify-content: center;
     align-items: center;
 }
@@ -280,4 +276,9 @@ color:#797979;
 
 .fa-info-circle:hover {
   color: white;
+}
+
+.escala_li{
+	color: #fff;
+	text-decoration: none;
 }

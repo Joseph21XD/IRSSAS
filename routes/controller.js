@@ -1,13 +1,66 @@
 module.exports = {
+    //Función de inicio, 
     getHomePage: (req, res) => {
         req.session.value= 0;
-        res.render('pages/index.ejs', {"var1":["Libano","San_Juan","Colorado","Las_Juntas","San_Miguel", "Rio_Naranjo", "Tilaran", "Quebrada_Grande","Sierra","Mogote","Tronadora","Tierras_Morenas","Bagaces","Nacascolo","Arancibia","Arenal","La_Fortuna","La_Union","Porozal"],"var2":[0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3], "error":""});  
+        res.render('pages/index2.ejs',{"error":""});  
+    },
+
+    //Función enviar datos del mapa al script map.js del frontend
+    getSites: (req,res) => {
+        let query = "select C.codigo, avg(t.valor) as valor from Asada A, distrito C, Canton Ca, provincia P,"+
+        "(select s.Asada_ID, SUM(s.valor*i.valor)*100 as valor from indicadorxasada s, indicador i "+
+        "where s.Indicador_ID=i.ID  group by (s.Asada_ID)) t where A.DISTRITO_ID=C.ID and "+
+        "A.DISTRITO_CANTON_ID=Ca.ID and A.DISTRITO_CANTON_PROVINCIA_ID=P.ID and C.CANTON_PROVINCIA_ID=P.ID "+
+        "and C.CANTON_ID=Ca.ID and Ca.PROVINCIA_ID=P.ID and A.id=t.asada_id group by(c.codigo);";
+        db.query(query, function(err, rows, fields) {
+        if (!err){
+            var dictionary = [];
+            var values = []
+            for (var i = rows.length - 1; i >= 0; i--) {
+                dictionary.push(rows[i].codigo);
+                if(rows[i].valor < 20.0)
+                    values.push(4);
+                else if(rows[i].valor < 40.0)
+                    values.push(3);
+                else if(rows[i].valor < 60.0)
+                    values.push(2);
+                else if(rows[i].valor < 80.0)
+                    values.push(1);
+                else
+                    values.push(0);
+            }
+            var jsonsites = { "sitios": dictionary, "valores": values }
+            res.send(jsonsites);
+        }
+        else{
+            console.log('Error while performing Query.');
+            res.send({});
+            }
+
+        });
     },
 
     getVisor: (req, res, next) => {
-        if(req.session.value==1)
-        res.render('pages/visor.ejs', {"var1":["Libano","San_Juan","Colorado","Las_Juntas","San_Miguel", "Rio_Naranjo", "Tilaran", "Quebrada_Grande","Sierra","Mogote","Tronadora","Tierras_Morenas","Bagaces","Nacascolo","Arancibia","Arenal","La_Fortuna","La_Union","Porozal"],"var2":[0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3], "error":""});
-        else
+        if(req.session.value==1){
+        let query = "select distinct C.codigo from Asada A, distrito C, Canton Ca, provincia P where A.DISTRITO_ID=C.ID and A.DISTRITO_CANTON_ID=Ca.ID and A.DISTRITO_CANTON_PROVINCIA_ID=P.ID and C.CANTON_PROVINCIA_ID=P.ID and C.CANTON_ID=Ca.ID and Ca.PROVINCIA_ID=P.ID;";
+        db.query(query, function(err, rows, fields) {
+        if (!err){
+            var dictionary = [];
+            var values = []
+            for (var i = rows.length - 1; i >= 0; i--) {
+                dictionary.push(rows[i].codigo);
+                values.push(Math.floor(Math.random() * (4 - 0)) + 0);
+            }
+            dictionary.push("7011");
+            values.push(1);
+            res.render('pages/visor.ejs', {"var1":dictionary ,"var2":values, "error":""});  
+        }
+        else{
+            console.log('Error while performing Query.');
+            res.redirect('/main');}
+
+        });
+        }else
             res.redirect('/');
 
     },
@@ -21,18 +74,18 @@ module.exports = {
                 next();
             }
             else{
-                res.render('pages/index.ejs', {"var1":"error","var2":[], "error":"Usuario o contraseña invalidos"});
+                res.render('pages/index2.ejs', {"var1":"error","var2":[], "error":"Usuario o contraseña invalidos"});
             }
         }
         else{
-            res.render('pages/index.ejs', {"var1":"error","var2":[], "error":"Usuario o contraseña invalidos"})
+            res.render('pages/index2.ejs', {"var1":"error","var2":[], "error":"Usuario o contraseña invalidos"})
         }
         });
     },
 
     getMain: (req, res) => {
         if(req.session.value==1){
-        let query = "select A.codigo, A.nombre, C.Nombre as distrito,Ca.Nombre as canton,P.Nombre as provincia from Asada A, distrito C, Canton Ca, provincia P where A.DISTRITO_ID=C.ID and A.DISTRITO_CANTON_ID=Ca.ID and A.DISTRITO_CANTON_PROVINCIA_ID=P.ID and C.CANTON_PROVINCIA_ID=P.ID and C.CANTON_ID=Ca.ID and Ca.PROVINCIA_ID=P.ID;";
+        let query = "select A.id, A.nombre, C.Nombre as distrito,Ca.Nombre as canton,P.Nombre as provincia from Asada A, distrito C, Canton Ca, provincia P where A.DISTRITO_ID=C.ID and A.DISTRITO_CANTON_ID=Ca.ID and A.DISTRITO_CANTON_PROVINCIA_ID=P.ID and C.CANTON_PROVINCIA_ID=P.ID and C.CANTON_ID=Ca.ID and Ca.PROVINCIA_ID=P.ID;";
         // execute query
         db.query(query, function(err, rows, fields) {
         if (!err){
@@ -52,7 +105,7 @@ module.exports = {
         if(req.session.value==1){
         var id = req.params.id;
         var f = new Date();
-        let query = "select A.nombre, Su.detalle ,S.texto from subcomponentexasada S inner join Asada A on A.codigo=S.Asada_Codigo inner join subcomponente Su on Su.ID=S.Subcomponente_ID where S.Asada_Codigo ="+id+" and Año= "+ f.getFullYear()+";";
+        let query = "select A.nombre, Su.detalle ,S.texto from indicadorxasada S inner join Asada A on A.id=S.Asada_id inner join indicador Su on Su.ID=S.indicador_id where S.Asada_id ="+id+" and Año= "+ f.getFullYear()+";";
         // execute query
         db.query(query, function(err, rows, fields) {
         if (!err){
@@ -68,13 +121,54 @@ module.exports = {
     },
 
     getComponente: (req,res) =>{
-        var id = req.params.id;
-        var var1 = ["Libano","San_Juan","Colorado","Las_Juntas","San_Miguel", "Rio_Naranjo", "Tilaran", "Quebrada_Grande","Sierra","Mogote","Tronadora","Tierras_Morenas","Bagaces","Nacascolo","Arancibia","Arenal","La_Fortuna","La_Union","Porozal"];
-        var var2 = [3,2,1,3,0,2,3,1,0,4,0,1,4,3,4,0,1,2,3];
-        if(req.session.value==0)
-            res.render('pages/index.ejs', {"var1":var1,"var2":var2, "error":""});  
-        else
-            res.render('pages/visor.ejs', {"var1":var1,"var2":var2, "error":""});  
+        var id = req.query.id;
+        var tipo = req.query.tipo;
+        var s = "";
+        if(tipo == "IRSSAS"){
+            s= "select s.Asada_ID, SUM(s.valor*i.valor)*100 as valor from indicadorxasada s, indicador i where s.Indicador_ID=i.ID  group by (s.Asada_ID)";
+        }
+        else if(tipo == "SubComponente"){
+            s = "SELECT s.Asada_ID, (SUM(s.valor * i.valor) * 1000000) / (d.valor * c.valor) AS valor FROM indicadorxasada s, indicador i, "+
+                "subcomponente d, componente c WHERE s.Indicador_ID = i.ID and i.Subcomponente_ID=d.ID and d.Componente_ID= c.ID "+
+                "and d.id= "+id+" GROUP BY (s.Asada_ID) ";
+        }
+        else{
+            s = "SELECT s.Asada_ID, (SUM(s.valor * i.valor) * 10000) / c.valor  AS valor FROM indicadorxasada s, indicador i, "+
+                "subcomponente d, componente c WHERE s.Indicador_ID = i.ID  and i.Subcomponente_ID=d.ID and d.Componente_ID= c.ID "+
+                "and d.Componente_ID= "+id+" GROUP BY (s.Asada_ID)";
+        }
+
+        let query = "select C.codigo, avg(t.valor) as valor from Asada A, distrito C, Canton Ca, provincia P,"+
+        "("+s+") t where A.DISTRITO_ID=C.ID and "+
+        "A.DISTRITO_CANTON_ID=Ca.ID and A.DISTRITO_CANTON_PROVINCIA_ID=P.ID and C.CANTON_PROVINCIA_ID=P.ID "+
+        "and C.CANTON_ID=Ca.ID and Ca.PROVINCIA_ID=P.ID and A.id=t.asada_id group by(c.codigo);";
+
+        db.query(query, function(err, rows, fields) {
+        if (!err){
+            var dictionary = [];
+            var values = []
+            for (var i = rows.length - 1; i >= 0; i--) {
+                dictionary.push(rows[i].codigo);
+                if(rows[i].valor < 20.0)
+                    values.push(4);
+                else if(rows[i].valor < 40.0)
+                    values.push(3);
+                else if(rows[i].valor < 60.0)
+                    values.push(2);
+                else if(rows[i].valor < 80.0)
+                    values.push(1);
+                else
+                    values.push(0);
+            }
+            var jsonsites = { "sitios": dictionary, "valores": values }
+            res.send(jsonsites);
+        }
+        else{
+            console.log('Error while performing Query.');
+            res.send({});
+            }
+
+        });
 
     },
 
@@ -107,7 +201,7 @@ module.exports = {
         var ident = req.body.ident;
         var site = req.body.site;
         var sites = site.split("-");
-        let query = "insert into asada(codigo, nombre, DISTRITO_ID, DISTRITO_CANTON_ID, DISTRITO_CANTON_PROVINCIA_ID) values("+ident+",'"+nom+"',"+sites[0]+","+sites[1]+","+sites[2]+");";
+        let query = "insert into asada(id, nombre, DISTRITO_ID, DISTRITO_CANTON_ID, DISTRITO_CANTON_PROVINCIA_ID) values("+ident+",'"+nom+"',"+sites[0]+","+sites[1]+","+sites[2]+");";
         // execute query
         db.query(query, function(err, result) {
         if (!err){
@@ -120,6 +214,45 @@ module.exports = {
         );
         }
         else
+            res.redirect('/');
+    },
+
+
+    getDatosAsada: (req, res) => {
+        if(req.session.value==1){
+        var id = req.params.id;
+        var f = new Date();
+        let query = "select * from Asada;";
+        let query2 = "select * from indicador;"
+        // execute query
+        db.query(query, function(err, rows, fields) {
+        if (!err){
+                db.query(query2, function(err1, rows1, fields1) {
+                if (!err1){
+                    console.log(rows)
+                    console.log(rows1)
+                    res.render('pages/getDatosAsada.ejs',{"asadas":rows, "preguntas":rows1})
+                }
+                else{
+                    console.log('Error while performing Query.');
+                    res.redirect('/main');
+                }
+                });
+        }
+        else{
+            console.log('Error while performing Query.');
+            res.render('pages/index.ejs', {"var1":"error","var2":[], "error":"Usuario o contraseña invalidos"});
+        }
+        });
+        }
+        else
+            res.redirect('/');
+    },
+
+    postGetDatosAsada: (req,res) => {
+        if(req.session.value==1){
+            
+        }else
             res.redirect('/');
     }
 

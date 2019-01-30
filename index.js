@@ -12,7 +12,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;*/
 
-const {getHomePage, login, getMain, getAsada, getVisor, getComponente, logout, getnewAsada, postnewAsada} = require('./routes/controller');
+const {getHomePage, login, getMain, getAsada, getVisor, getComponente, logout, getnewAsada, postnewAsada, getDatosAsada, getSites} = require('./routes/controller');
 
 
 
@@ -111,12 +111,15 @@ app.post('/', [login, getMain]);
 app.get('/visor', getVisor);
 app.get('/main', getMain);
 app.get('/logout', logout);
+app.get('/getSites', getSites);
+app.get('/getComponente', getComponente);
+
+app.get('/asada/response', getDatosAsada);
 
 app.get('/asada/add', getnewAsada);
 app.post('/asada/add', postnewAsada);
 
 app.get('/asada/:id', getAsada);
-app.get('/:id', getComponente);
 
 
 
