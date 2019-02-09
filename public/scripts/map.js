@@ -85,6 +85,35 @@ layers.push(new ol.layer.Tile({
                 })
               }))
 
+      var madrid = new ol.Feature({
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([-85.3868195,10.5685225])),
+      });
+
+      var stroke = new ol.style.Stroke({color: 'black', width: 2});
+      var fill = new ol.style.Fill({color: 'red'});
+
+      madrid.setStyle(new ol.style.Style({
+        image: new ol.style.RegularShape(({
+          fill: fill,
+            stroke: stroke,
+            points: 3,
+            radius: 10,
+            rotation: Math.PI / 4,
+            angle: 0
+        }))
+      }));
+
+
+      var vectorSource = new ol.source.Vector({
+        features: [madrid]
+      });
+
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorSource
+      });
+
+      layers.push(vectorLayer);
+
 var map = new ol.Map({
             target: 'map',
             layers: layers,
