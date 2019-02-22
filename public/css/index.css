@@ -89,7 +89,7 @@ a, a:hover, a:focus {
     padding: 0px 0;
 }
 
-#sidebar ul p {
+#sidebar ul p , #sidebar ul h3{
     color: #fff;
     padding: 10px;
 }
@@ -211,4 +211,8 @@ DISPLAY LI UL NAVBAR
   overflow: hidden;
   max-height: 0;
   -webkit-transition: all 0.7s ease-out;
+}
+
+.tablerow td:hover{
+    background-color: #193d66;
 }

@@ -1,3 +1,6 @@
+//funcion que solicita al backend un json con riesgos
+//refresca el mapa 
+// se utiliza por el menu lateral
 function changeComponent(tipo, id){
 	layers[2].setStyle(null);
 	var parameters = { "id": id, "tipo": tipo};

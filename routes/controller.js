@@ -1,9 +1,10 @@
 module.exports = {
-    //Función de inicio, 
+    //Función de inicio, carga el mapa
     getHomePage: (req, res) => {
         req.session.value= 0;
-        res.render('pages/index2.ejs',{"error":""});  
+        res.render('pages/index.ejs',{"error":""});  
     },
+
 
     //Función enviar datos del mapa al script map.js del frontend
     getSites: (req,res) => {
@@ -16,18 +17,13 @@ module.exports = {
         if (!err){
             var dictionary = [];
             var values = []
+            var x= 0;
             for (var i = rows.length - 1; i >= 0; i--) {
                 dictionary.push(rows[i].codigo);
-                if(rows[i].valor < 20.0)
-                    values.push(4);
-                else if(rows[i].valor < 40.0)
-                    values.push(3);
-                else if(rows[i].valor < 60.0)
-                    values.push(2);
-                else if(rows[i].valor < 80.0)
-                    values.push(1);
-                else
-                    values.push(0);
+                x= 4-(Math.floor(rows[i].valor/20));
+                if(x > 4) x=4;
+                if(x < 0) x=0;
+                values.push(x);
             }
             var jsonsites = { "sitios": dictionary, "valores": values }
             res.send(jsonsites);
@@ -40,31 +36,15 @@ module.exports = {
         });
     },
 
+    //Ver visor
     getVisor: (req, res, next) => {
         if(req.session.value==1){
-        let query = "select distinct C.codigo from Asada A, distrito C, Canton Ca, provincia P where A.DISTRITO_ID=C.ID and A.DISTRITO_CANTON_ID=Ca.ID and A.DISTRITO_CANTON_PROVINCIA_ID=P.ID and C.CANTON_PROVINCIA_ID=P.ID and C.CANTON_ID=Ca.ID and Ca.PROVINCIA_ID=P.ID;";
-        db.query(query, function(err, rows, fields) {
-        if (!err){
-            var dictionary = [];
-            var values = []
-            for (var i = rows.length - 1; i >= 0; i--) {
-                dictionary.push(rows[i].codigo);
-                values.push(Math.floor(Math.random() * (4 - 0)) + 0);
-            }
-            dictionary.push("7011");
-            values.push(1);
-            res.render('pages/visor.ejs', {"var1":dictionary ,"var2":values, "error":""});  
-        }
-        else{
-            console.log('Error while performing Query.');
-            res.redirect('/main');}
-
-        });
+            res.render('pages/visor.ejs',{"error":""});
         }else
             res.redirect('/');
-
     },
 
+    // login
     login: (req, res, next) => {
         let query = "select * from usuario where usuario= '"+ req.body.usr+"' and contrasenna= '"+req.body.pwd+"'";
         db.query(query, function(err, rows, fields) {
@@ -74,15 +54,16 @@ module.exports = {
                 next();
             }
             else{
-                res.render('pages/index2.ejs', {"var1":"error","var2":[], "error":"Usuario o contraseña invalidos"});
+                res.render('pages/index.ejs', {"var1":"error","var2":[], "error":"Usuario o contraseña invalidos"});
             }
         }
         else{
-            res.render('pages/index2.ejs', {"var1":"error","var2":[], "error":"Usuario o contraseña invalidos"})
+            res.render('pages/index.ejs', {"var1":"error","var2":[], "error":"Usuario o contraseña invalidos"})
         }
         });
     },
 
+    // ingreso al main
     getMain: (req, res) => {
         if(req.session.value==1){
         let query = "select A.id, A.nombre, C.Nombre as distrito,Ca.Nombre as canton,P.Nombre as provincia from Asada A, distrito C, Canton Ca, provincia P where A.DISTRITO_ID=C.ID and A.DISTRITO_CANTON_ID=Ca.ID and A.DISTRITO_CANTON_PROVINCIA_ID=P.ID and C.CANTON_PROVINCIA_ID=P.ID and C.CANTON_ID=Ca.ID and Ca.PROVINCIA_ID=P.ID;";
@@ -98,18 +79,18 @@ module.exports = {
         }
         else
             res.redirect('/');
-
     },
 
+    // obtener una asada usando un id
     getAsada: (req, res) => {
         if(req.session.value==1){
         var id = req.params.id;
         var f = new Date();
-        let query = "select A.nombre, Su.detalle ,S.texto from indicadorxasada S inner join Asada A on A.id=S.Asada_id inner join indicador Su on Su.ID=S.indicador_id where S.Asada_id ="+id+" and Año= "+ f.getFullYear()+";";
-        // execute query
+        let query = "select A.nombre, Su.detalle ,S.texto from indicadorxasada S inner join Asada A on A.id=S.Asada_id inner join indicador Su on Su.ID=S.indicador_id where S.Asada_id ="+id+" and Año= 2018;";
         db.query(query, function(err, rows, fields) {
         if (!err){
-            res.render('pages/asada.ejs',{"rows":rows})}
+            console.log(rows);
+            res.render('pages/asada2.ejs',{"rows":rows})}
         else{
             console.log('Error while performing Query.');
             res.render('pages/index.ejs', {"var1":"error","var2":[], "error":"Usuario o contraseña invalidos"});
@@ -120,6 +101,7 @@ module.exports = {
             res.redirect('/');
     },
 
+    // obtiene asadas y riesgos de un componentes o subcomponente
     getComponente: (req,res) =>{
         var id = req.query.id;
         var tipo = req.query.tipo;
@@ -147,18 +129,14 @@ module.exports = {
         if (!err){
             var dictionary = [];
             var values = []
+            var x = 0;
             for (var i = rows.length - 1; i >= 0; i--) {
                 dictionary.push(rows[i].codigo);
-                if(rows[i].valor < 20.0)
-                    values.push(4);
-                else if(rows[i].valor < 40.0)
-                    values.push(3);
-                else if(rows[i].valor < 60.0)
-                    values.push(2);
-                else if(rows[i].valor < 80.0)
-                    values.push(1);
-                else
-                    values.push(0);
+                x= 4-(Math.floor(rows[i].valor/20));
+                if(x > 4) x=4;
+                if(x < 0) x=0;
+                values.push(x);
+
             }
             var jsonsites = { "sitios": dictionary, "valores": values }
             res.send(jsonsites);
@@ -172,12 +150,14 @@ module.exports = {
 
     },
 
+    // logount
     logout: (req,res) =>{
         req.session.value=0;
         console.log("Logout");
         res.redirect('/');
     },
 
+    // crear nueva asada
     getnewAsada: (req,res) =>{
         if(req.session.value==1){
         let query = "select C.ID as idd ,Ca.ID as idc ,P.ID as idp, C.Nombre as distrito ,Ca.Nombre as canton ,P.Nombre as provincia from distrito C, Canton Ca, provincia P where C.CANTON_ID=Ca.ID and C.CANTON_PROVINCIA_ID=P.ID and Ca.PROVINCIA_ID=P.ID order by 4;";
@@ -195,6 +175,7 @@ module.exports = {
             res.redirect('/');
     },
 
+    // insertar nueva asada
     postnewAsada: (req,res) =>{
         if(req.session.value==1){
         var nom = req.body.nom;
@@ -217,7 +198,7 @@ module.exports = {
             res.redirect('/');
     },
 
-
+    // crear nuevo formulario
     getDatosAsada: (req, res) => {
         if(req.session.value==1){
         var id = req.params.id;
@@ -249,9 +230,10 @@ module.exports = {
             res.redirect('/');
     },
 
+    // insertar nuevo formulario
     postGetDatosAsada: (req,res) => {
         if(req.session.value==1){
-            
+            // aun no se que poner
         }else
             res.redirect('/');
     }

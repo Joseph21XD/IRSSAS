@@ -1,34 +1,74 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <% include ../partials/header %>
-  </head>
-  <body>
-    <div class="menu">
-     <div class="menu_item"><a href="https://www.aya.go.cr/SitePages/Principal.aspx"><img class="menu_image" src="images/tec.png" alt=""></a></div>
-      <div class="menu_item"><a href="https://www.aya.go.cr/SitePages/Principal.aspx"><H1>Proyecto IRSSAS</H1></a></div>
-     <div class="menu_item_block">
-      <form class="menu_form" action="/main">
-        <div class="menu_item"><input class="login_button" type="submit" name="button" value="Regresar al menú Principal"></div>
-      </form>
-      </div>
-    </div>
-    <div class="lateral">
-              <% include ../partials/lateral %>
-    </div>
-    <div id="map"></div>
-    <script src="scripts/map.js"></script>
-        <div style="width: 200px; background-color: #012A60; position: absolute; top: 100px; right: 0px;">
-      <ul style="list-style-type: square;">
-        <li style="list-style-type: none; color: #fff;">Nivel de Riesgo</li>
-        <br>
-        <li style="color: rgb(254, 0, 2);">Alto</li>
-        <li style="color: rgb(255, 152, 1);">Medio-Alto</li>
-        <li style="color: rgb(253, 235, 3);">Medio</li>
-        <li style="color: rgb(122, 213, 73);">Medio-Bajo</li>
-        <li style="color: rgb(0, 153, 0);">Bajo</li>
-        <li style="color: rgb(255,255,255);">No definido</li>
-      </ul>
-    </div>
-  </body>
+    <head>
+        <% include ../partials/header %>
+    </head>
+
+    <body>
+
+        <div class="wrapper">
+            <!-- Sidebar Holder -->
+            <% include ../partials/lateral %>
+            <!-- Page Content Holder -->
+            <div id="content">
+
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+
+                        <div class="navbar-header">
+                            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                                <i class="glyphicon glyphicon-leaf"></i>
+                                <span></span>
+                            </button>
+                        </div>
+
+                        <div style="float: right;">
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <form class="form-inline" action="/main">
+                                    <button type="submit" class="btn btn-info navbar-btn">Regresar al menú Principal</button>
+                                </form>
+                            </div>
+                                
+                        </div>
+                    </div>
+                    <div id="map">
+                    </div>
+                    <% include ../partials/riesgo %>
+                </nav>
+            </div>
+        </div>
+
+
+        <!-- jQuery CDN -->
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <!-- Bootstrap Js CDN -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <!-- jQuery Custom Scroller CDN -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+               
+
+                $('#sidebarCollapse').on('click', function () {
+                    $('#sidebar, #content').toggleClass('active');
+                    $('.collapse.in').toggleClass('in');
+                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                });
+
+                $("#divrisk").click(function(){
+                     $("#divrisk").toggle("slow","linear");
+                });
+
+                $("#buttonrisk").click(function(){
+                     $("#divrisk").toggle("slow","linear");
+                });
+
+
+            });
+        </script>
+        <script src="scripts/map.js"></script>
+        <script src="scripts/script.js"></script>
+    </body>
 </html>
+

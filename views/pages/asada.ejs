@@ -1,34 +1,84 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <% include ../partials/header %>
-  </head>
-  <body>
-    <header>
-     <% include ../partials/mainHeader %>
-    </header>
-    <div class="main" style="overflow: auto;">
-      <div class="main_table">
-      <h1 style="color: rgb(0, 40, 85); padding-left: 10px;"><%= rows[0].nombre%></h1>
-      <h2 style="color: rgb(0, 40, 85); padding-left: 10px;">2018</h2>
-        <table>
-          <thead>
-            <th>Pregunta</th>
-            <th>Respuesta</th>
-          </thead>
-          <% rows.forEach(function(asada) { %>
-          <tr>
-              <td><%= asada.detalle %></td>
-              <td><%= asada.texto%></td>
-          </tr>
-          <% }); %>
-        </table>
-      </div>
-      </div>
+    <head>
+        <% include ../partials/header %>
+    </head>
 
-      <div class="main_lateral">
-      	<% include ../partials/nav %>       
-      </div>
+    <body>
 
-  </body>
+        <div class="wrapper">
+            <!-- Sidebar Holder -->
+            <% include ../partials/nav %>
+            <!-- Page Content Holder -->
+            <div id="content">
+
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+
+                        <div class="navbar-header">
+                            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                                <i class="glyphicon glyphicon-leaf"></i>
+                                <span></span>
+                            </button>
+                        </div>
+
+                        <div style="float: right;">
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                    <a href="/" class="btn btn-info navbar-btn"> Cerrar Sesión </a>
+                                    <h1 style="color: rgb(0, 40, 85); padding-left: 10px;"><%= rows[0].nombre%></h1>
+                                    <h3 style="color: rgb(0, 40, 85); padding-left: 10px;">2018</h2>
+                                    
+                            </div>                           
+                        </div>
+                    </div>
+                    <div>
+                        <table>
+                            <thead>
+                                <th>Pregunta</th>
+                                <th>Respuesta</th>
+                            </thead>
+                            <% rows.forEach(function(asada) { %>
+                            <tr>
+                                <td><%= asada.detalle %></td>
+                                <td><%= asada.texto%></td>
+                            </tr>
+                            <% }); %>
+                        </table>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+
+        <!-- jQuery CDN -->
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <!-- Bootstrap Js CDN -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <!-- jQuery Custom Scroller CDN -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+               
+
+                $('#sidebarCollapse').on('click', function () {
+                    $('#sidebar, #content').toggleClass('active');
+                    $('.collapse.in').toggleClass('in');
+                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                });
+
+                $("#divrisk").click(function(){
+                     $("#divrisk").toggle("slow","linear");
+                });
+
+                $("#buttonrisk").click(function(){
+                     $("#divrisk").toggle("slow","linear");
+                });
+
+
+            });
+        </script>
+        <script src="scripts/map.js"></script>
+        <script src="scripts/script.js"></script>
+    </body>
 </html>

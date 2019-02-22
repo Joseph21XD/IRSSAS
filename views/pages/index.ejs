@@ -1,29 +1,80 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <% include ../partials/header %>
-  </head>
-  <body>
-    <div class="menu">
-     <div class="menu_item"><a href="https://www.aya.go.cr/SitePages/Principal.aspx"><img class="menu_image" src="images/tec.png" alt=""></a></div>
-      <div class="menu_item"><a href="https://www.aya.go.cr/SitePages/Principal.aspx"><H1>Proyecto IRSSAS</H1></a></div>
-     <div class="menu_item_block">
-      <form class="menu_form" method="post">
-        <div class="menu_item"><input type="text" name="usr" placeholder="Usuario">
-          <p style="color: #f00;"><%= error%></p></div>
-        <div class="menu_item"><input type="password" name="pwd" placeholder="Contraseña"></div>
-        <div class="menu_item"><input class="login_button" type="submit" name="button" value="Ingresar"></div>
-      </form>
-      </div>
-    </div>
-    <div class="lateral">
-        <% include ../partials/lateral %>
-    </div>
-    <div id="map">
-      <div style="background-color: #000; width: 100px; height: 100px;">
-        
-      </div>
-    </div>
-    <script src="scripts/map.js"></script>
-  </body>
+    <head>
+        <% include ../partials/header %>
+    </head>
+
+    <body>
+
+        <div class="wrapper">
+            <!-- Sidebar Holder -->
+            <% include ../partials/lateral %>
+            <!-- Page Content Holder -->
+            <div id="content">
+
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+
+                        <div class="navbar-header">
+                            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                                <i class="glyphicon glyphicon-leaf"></i>
+                                <span></span>
+                            </button>
+                        </div>
+
+                        <div style="float: right;">
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <form class="form-inline" method="post">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="usr" name="usr" placeholder="Usuario">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Contraseña">
+                                    </div>
+                                    <button type="submit" class="btn btn-info navbar-btn">Ingresar</button>
+                                    <p style="color: #f00;"><%= error%></p>
+                                </form>
+                            </div>
+                                
+                        </div>
+                    </div>
+                    <div id="map">
+                    </div>
+                    <% include ../partials/riesgo %>
+                </nav>
+            </div>
+        </div>
+
+
+        <!-- jQuery CDN -->
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <!-- Bootstrap Js CDN -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <!-- jQuery Custom Scroller CDN -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+               
+
+                $('#sidebarCollapse').on('click', function () {
+                    $('#sidebar, #content').toggleClass('active');
+                    $('.collapse.in').toggleClass('in');
+                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                });
+
+                $("#divrisk").click(function(){
+                     $("#divrisk").toggle("slow","linear");
+                });
+
+                $("#buttonrisk").click(function(){
+                     $("#divrisk").toggle("slow","linear");
+                });
+
+
+            });
+        </script>
+        <script src="scripts/map.js"></script>
+        <script src="scripts/script.js"></script>
+    </body>
 </html>

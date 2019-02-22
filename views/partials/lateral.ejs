@@ -1,22 +1,30 @@
-       <h1 id="myh1">Componentes</h1>
-       <h1 id="var1" hidden=""><%= var1%></h1>
-       <h1 id="var2" hidden=""><%= var2%></h1>
-            <ul class="mainmenu">
-              <li><a href=""><i class="fa fa-tint"></i> Saneamiento</a>
-              <ul class="submenu">
-                <li><a href="/1"> Gestión de Aguas Residuales</a></li>
-                <li><a href="/2"> Gestión de Residuos Sólidos</a></li>
-              </ul>
-              </li>
-              <li><a href=""><i class="fa fa-tint"></i> Gestión del Recurso Hídrico</a>
-                <ul class="submenu">
-                  <li><a href="/3"> Gestión de Protección del Recurso Hídrico</a></li>
-                  <li><a href="/4"> Calidad de Agua Potable</a></li>
-                  <li><a href="/5"> Gestión Administrativo/Financiero</a></li>
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h2>Proyecto IRSSAS</h2>
+                </div>
+
+                <ul class="list-unstyled components mainmenu">
+                    <h3>Indicadores</h3>
+                    <li class="active"><a onclick="changeComponent('Componente',1);">Saneamiento</a>
+                    <ul class="components submenu">
+                    <li><a onclick="changeComponent('SubComponente',1);">Gestión de Aguas Residuales</a></li>
+                    <li><a onclick="changeComponent('SubComponente',2);">Gestión de Residuos Sólidos</a></li>
+                    </ul></li>
+
+                    <li class="active"><a onclick="changeComponent('Componente',2);" >Gestión del Recurso Hídrico</a>
+                    <ul class="components submenu">
+                    <li><a onclick="changeComponent('SubComponente',3);">Gestión de Protección del Recurso Hídrico</a></li>
+                    <li><a onclick="changeComponent('SubComponente',4);">Calidad de Agua Potable</a></li>
+                    <li><a onclick="changeComponent('SubComponente',5);">Gestión Administrativo/Financiero</a></li>
+                    </ul></li>
+
+                    <li class="active"><a a onclick="changeComponent('Componente',3);" >Índice de Desarrollo</a></li>
+                    <li class="active"><a a onclick="changeComponent('Componente',4);">Educación</a></li>
+                    <li class="active"><a a onclick="changeComponent('Componente',5);">Fenómenos Naturales</a></li>
+                    <li class="active laclase"><a a onclick="changeComponent('IRSSAS',0);">IRSSAs</a></li>
+
+                    
                 </ul>
-              </li>
-              <li><a href="/6"><i class="fa fa-tint"></i> Índice de Desarrollo</a></li>
-              <li><a href="/7"><i class="fa fa-tint"></i> Educación</a></li>
-              <li><a href="/7"><i class="fa fa-tint"></i> Fenómenos Naturales</a></li>
-              <li><a href="/8"><i class="fa fa-tint"></i> IRSSAs</a></li>
-            </ul>
+
+                
+            </nav>
