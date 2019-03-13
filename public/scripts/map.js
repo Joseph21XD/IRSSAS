@@ -68,7 +68,7 @@ var layers = [
                   serverType: 'geoserver',
                   transition: 0
                 })
-              }),
+              })
             ]
 
 // funcion jquery para obtener datos de riesgo de asadas

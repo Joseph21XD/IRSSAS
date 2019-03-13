@@ -216,3 +216,16 @@ DISPLAY LI UL NAVBAR
 .tablerow td:hover{
     background-color: #193d66;
 }
+
+.glyphicon-trash{
+    color: rgb(239,51,64);
+}
+
+.hideinput{
+    background-color: transparent;
+    border: 0px solid;
+}
+
+.hideinput:focus{
+    outline: none;
+}

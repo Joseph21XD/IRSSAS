@@ -9,7 +9,8 @@ const app = express();
 const PORT = process.env.PORT || 3000
 
 //llamar funciones de controller.js
-const {getHomePage, login, getMain, getAsada, getVisor, getComponente, logout, getnewAsada, postnewAsada, getDatosAsada, getSites} = require('./routes/controller');
+const {getCrudComponente} = require('./routes/cruds');
+const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites} = require('./routes/controller');
 
 
 //conexion de BD
@@ -59,10 +60,11 @@ app.get('/logout', logout);
 app.get('/getSites', getSites);
 app.get('/getComponente', getComponente);
 
-app.get('/asada/response', getDatosAsada);
-app.get('/asada/add', getnewAsada);
-app.post('/asada/add', postnewAsada);
-app.get('/asada/:id', getAsada);
+app.get('/componente', getCrudComponente);
+//app.get('/asada/response', getDatosAsada);
+//app.get('/asada/add', getnewAsada);
+//app.post('/asada/add', postnewAsada);
+//app.get('/asada/:id', getAsada);
 
 
 // llamada al puerto 

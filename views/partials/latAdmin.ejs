@@ -1,0 +1,39 @@
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h2 id="irss">Proyecto IRSSAS</h2>
+                </div>
+
+                <ul class="list-unstyled components mainmenu">
+
+                    <% if(usuario.tipo == 1){%>
+                    
+                    <li class="active"><a onclick=""> <i class="glyphicon glyphicon-lock"></i> Administración</a>
+                    <ul class="components submenu">
+                    <li><a href="/componente">Componentes</a></li>
+                    <li><a onclick="">Subcomponentes</a></li>
+                    <li><a onclick="">Indicadores</a></li>
+                    <li><a onclick="">Asadas</a></li>
+                    <li><a onclick="">Usuarios</a></li>
+                    </ul></li>
+                    <%}%>
+
+                    <li class="active"><a onclick="" > <i class="glyphicon glyphicon-signal"></i> Estudios</a>
+                    <ul class="components submenu">
+                    <li><a onclick="">Gráficos</a></li>
+                    <li><a onclick="">Estadísticas</a></li>
+                    </ul></li>
+
+                    <li class="active"><a onclick="" > <i class="glyphicon glyphicon-folder-open"></i> Históricos</a>
+                    <ul class="components submenu">
+                    <li><a onclick="">Mapa de Comparación</a></li>
+                    <li><a onclick="">Formularios</a></li>
+                    </ul></li>
+
+                    <li class="active"><a a onclick="" > <i class="glyphicon glyphicon-book"></i> Informes</a></li>
+                    <li class="active"><a a onclick=""> <i class="glyphicon glyphicon-eye-open"></i> Visor</a></li>
+                    <li class="active"><a a onclick=""> <i class="glyphicon glyphicon-check"></i> Completar Formulario</a></li>
+                    
+                </ul>
+
+                
+            </nav>
