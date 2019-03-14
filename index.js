@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000
 
 //llamar funciones de controller.js
-const {getCrudComponente} = require('./routes/cruds');
+const {getCrudComponente,saveComponente} = require('./routes/cruds');
 const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites} = require('./routes/controller');
 
 
@@ -61,6 +61,7 @@ app.get('/getSites', getSites);
 app.get('/getComponente', getComponente);
 
 app.get('/componente', getCrudComponente);
+app.get('/saveComponente', saveComponente);
 //app.get('/asada/response', getDatosAsada);
 //app.get('/asada/add', getnewAsada);
 //app.post('/asada/add', postnewAsada);

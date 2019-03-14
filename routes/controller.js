@@ -99,11 +99,9 @@ module.exports = {
         " where A.DISTRITO_ID=C.codigo and "+
         " C.CANTON_ID=Ca.ID and C.PROVINCIA_ID=P.ID and A.id=t.asada_id group by(c.codigo)";
 
-        console.log(query);
 
         db.query(query, function(err, rows, fields) {
         if (!err){
-            console.log(rows);
             var dictionary = [];
             var values = []
             var x = 0;

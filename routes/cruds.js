@@ -7,7 +7,6 @@ module.exports = {
         // execute query
         db.query(query, function(err, rows, fields) {
         if (!err){
-            console.log(rows);
             res.render('pages/crudComponentes.ejs', {"rows":rows, "usuario": req.session.usuario})}
         else{
             console.log('Error while performing Query.');
@@ -19,6 +18,13 @@ module.exports = {
         }
         else
             res.redirect('/');
+    },
+
+    saveComponente: (req,res) =>{
+        var nuevos = req.query.nuevos;
+        var actualizados = req.query.actualizados;
+        var borrados = req.query.borrados;
+        
     }
 
 

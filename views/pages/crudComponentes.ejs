@@ -24,7 +24,11 @@
 
                         <div style="float: right;">
                             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <form action="/componente" onsubmit=" return saveComponent();" id="compsub">
+                                    <button type="submit"  id="savebutton" style="visibility: hidden;" class="btn btn-info navbar-btn">Guardar cambios</button>
+                                </form>
                                 <form action="/logout">
+                                    <p style="color: #f00;" id="error"></p>
                                     <button type="submit" class="btn btn-info navbar-btn">Cerrar Sesión</button>
                                 </form>
                             </div>                           
@@ -41,19 +45,19 @@
                                 </tr>
                             </thead>
                         <tbody id="componenttable">
-                                <%rows.forEach(function(componente) {%>
+                                <%rows.forEach(function(componente, index) {%>
                                 <tr>
-                                    <th scope="row"><%=componente.ID%></th>
-                                    <td><input type="text" class="form-control hideinput" name="name-<%=componente.ID%>" value="<%=componente.Nombre%>"></td>
-                                    <td><input type="number" class="form-control hideinput" name="value-<%=componente.ID%>" value="<%=componente.Valor%>"></td>
-                                    <td><i class="glyphicon glyphicon-trash" onclick="esta(<%=componente.ID%>);"></i></td>
+                                    <td><%=componente.ID%></td>
+                                    <td><input type="text" class="form-control hideinput" onchange="updateComponent(<%= componente.ID%>)" name="name-<%=componente.ID%>" value="<%=componente.Nombre%>"></td>
+                                    <td><input type="number" min="0" step="1" max="100" class="form-control hideinput" onchange="updateComponent(<%= componente.ID%>)" name="value-<%=componente.ID%>" value="<%=componente.Valor%>"></td>
+                                    <td><i class="glyphicon glyphicon-trash" onclick="deleteComponent(this, <%=componente.ID%>);"></i></td>
                                 </tr>
                                 <%});%>
                         </tbody>
                         </table>
                     </div>
                     <div id="divbutton" style=" position: absolute; bottom: 6px; right: 8px;">
-                        <button type="button" class="btn btn-info navbar-btn">
+                        <button type="button" onclick="addComponent();" class="btn btn-info navbar-btn">
                                 <i class="glyphicon glyphicon-plus"></i>
                                 <span></span>
                         </button>
@@ -91,7 +95,6 @@
 
             });
         </script>
-        <script src="scripts/map.js"></script>
-        <script src="scripts/script.js"></script>
+        <script src="scripts/crud.js"></script>
     </body>
 </html>

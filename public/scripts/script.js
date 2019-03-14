@@ -9,4 +9,4 @@ function changeComponent(tipo, id){
      }).done(function(res){     	
 		layers[2].setStyle(styleFunction);
 		});
-}
+};
