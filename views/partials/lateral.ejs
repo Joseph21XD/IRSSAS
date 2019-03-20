@@ -4,24 +4,24 @@
                 </div>
 
                 <ul class="list-unstyled components mainmenu">
-                    <h3>Indicadores</h3>
-                    <li class="active"><a onclick="changeComponent('Componente',1);">Saneamiento</a>
+                    <h3>Componentes</h3>
+                    <li class="active"><a id="Saneamiento" onclick="changeComponent('Componente',1, this.id);">Saneamiento</a>
                     <ul class="components submenu">
-                    <li><a onclick="changeComponent('SubComponente',1);">Gestión de Aguas Residuales</a></li>
-                    <li><a onclick="changeComponent('SubComponente',2);">Gestión de Residuos Sólidos</a></li>
+                    <li><a id="Gestión de Aguas Residuales" onclick="changeComponent('SubComponente',1, this.id);">Gestión de Aguas Residuales</a></li>
+                    <li><a id="Gestión de Residuos Sólidos" onclick="changeComponent('SubComponente',2, this.id);">Gestión de Residuos Sólidos</a></li>
                     </ul></li>
 
-                    <li class="active"><a onclick="changeComponent('Componente',2);" >Gestión del Recurso Hídrico</a>
+                    <li class="active"><a id="Gestión del Recurso Hídrico" onclick="changeComponent('Componente',2, this.id);" >Gestión del Recurso Hídrico</a>
                     <ul class="components submenu">
-                    <li><a onclick="changeComponent('SubComponente',3);">Gestión de Protección del Recurso Hídrico</a></li>
-                    <li><a onclick="changeComponent('SubComponente',4);">Calidad de Agua Potable</a></li>
-                    <li><a onclick="changeComponent('SubComponente',5);">Gestión Administrativo/Financiero</a></li>
+                    <li><a id="Gestión de Protección del Recurso Hídrico" onclick="changeComponent('SubComponente',3, this.id);">Gestión de Protección del Recurso Hídrico</a></li>
+                    <li><a id="Calidad de Agua Potable" onclick="changeComponent('SubComponente',4, this.id);">Calidad de Agua Potable</a></li>
+                    <li><a  id="Gestión Administrativo/Financiero" onclick="changeComponent('SubComponente',5, this.id);">Gestión Administrativo/Financiero</a></li>
                     </ul></li>
 
-                    <li class="active"><a a onclick="changeComponent('Componente',3);" >Índice de Desarrollo</a></li>
-                    <li class="active"><a a onclick="changeComponent('Componente',4);">Educación</a></li>
-                    <li class="active"><a a onclick="changeComponent('Componente',5);">Fenómenos Naturales</a></li>
-                    <li class="active laclase"><a a onclick="changeComponent('IRSSAS',0);">IRSSAs</a></li>
+                    <li class="active"><a id="Índice de Desarrollo" onclick="changeComponent('Componente',3, this.id);" >Índice de Desarrollo</a></li>
+                    <li class="active"><a id="Educación" onclick="changeComponent('Componente',4, this.id);">Educación</a></li>
+                    <li class="active"><a id="Fenómenos Naturales"  onclick="changeComponent('Componente',5, this.id);">Fenómenos Naturales</a></li>
+                    <li class="active laclase"><a id="Indice de Riesgo Sostenible en el Servicio de Agua y Saneamiento"  onclick="changeComponent('IRSSAS',0, this.id);">IRSSAS Total</a></li>
 
                     
                 </ul>

@@ -11,6 +11,10 @@ module.exports = {
         "(select s.Asada_ID, SUM(s.valor*i.valor)*100 as valor from indicadorxasada s, indicador i "+
         "where s.Indicador_ID=i.ID  group by (s.Asada_ID)) t where A.DISTRITO_ID=C.codigo and "+
         "C.CANTON_ID=Ca.ID and C.PROVINCIA_ID=P.ID and A.id=t.asada_id group by(c.codigo);";
+
+        let query2="SELECT s.Asada_ID, SUM(s.valor * i.valor) * 100 AS valor, a.Latitud, a.Longitud FROM "+
+        " indicadorxasada s, indicador i, Asada a WHERE s.Indicador_ID = i.ID and s.Asada_ID=a.ID GROUP BY (s.Asada_ID);";
+
         db.query(query, function(err, rows, fields) {
         if (!err){
             var dictionary = [];
@@ -23,8 +27,17 @@ module.exports = {
                 if(x < 0) x=0;
                 values.push(x);
             }
-            var jsonsites = { "sitios": dictionary, "valores": values }
-            res.send(jsonsites);
+            db.query(query2, function(err2,rows2,fields2){
+
+                for (var i = rows2.length - 1; i >= 0; i--) {
+                x= 4-(Math.floor(rows2[i].valor/20));
+                if(x > 4) x=4;
+                if(x < 0) x=0;
+                rows2[i].valor = x;
+                }
+                var jsonsites = { "sitios": dictionary, "valores": values, "asadas": rows2 }
+                res.send(jsonsites);
+            });
         }
         else{
             console.log('Error while performing Query.');
@@ -77,22 +90,29 @@ module.exports = {
 
     // obtiene asadas y riesgos de un componentes o subcomponente
     getComponente: (req,res) =>{
-        console.log("ENTRA")
         var id = req.query.id;
         var tipo = req.query.tipo;
         var s = "";
+        var k = "";
         if(tipo == "IRSSAS"){
             s= "select s.Asada_ID, SUM(s.valor*i.valor)*100 as valor from indicadorxasada s, indicador i where s.Indicador_ID=i.ID  group by (s.Asada_ID)";
+            k= "select s.Asada_ID, SUM(s.valor*i.valor)*100 as valor, a.Latitud, a.Longitud from indicadorxasada s, indicador i, Asada a where s.Indicador_ID=i.ID and s.Asada_ID=a.ID  group by (s.Asada_ID)";
         }
         else if(tipo == "SubComponente"){
             s = "SELECT s.Asada_ID, (SUM(s.valor * i.valor) * 1000000) / (d.valor * c.valor) AS valor FROM indicadorxasada s, indicador i, "+
                 "subcomponente d, componente c WHERE s.Indicador_ID = i.ID and i.Subcomponente_ID=d.ID and d.Componente_ID= c.ID "+
                 "and d.id= "+id+" GROUP BY (s.Asada_ID) ";
+            k = "SELECT s.Asada_ID, (SUM(s.valor * i.valor) * 1000000) / (d.valor * c.valor) AS valor, a.Latitud, a.Longitud FROM indicadorxasada s, indicador i, "+
+                "subcomponente d, componente c, Asada a WHERE s.Indicador_ID = i.ID and i.Subcomponente_ID=d.ID and d.Componente_ID= c.ID "+
+                "and d.id= "+id+" and s.Asada_ID=a.ID GROUP BY (s.Asada_ID) ";
         }
         else{
             s = "SELECT s.Asada_ID, (SUM(s.valor * i.valor) * 10000) / c.valor  AS valor FROM indicadorxasada s, indicador i, "+
                 "subcomponente d, componente c WHERE s.Indicador_ID = i.ID  and i.Subcomponente_ID=d.ID and d.Componente_ID= c.ID "+
                 "and d.Componente_ID= "+id+" GROUP BY (s.Asada_ID)";
+            k = "SELECT s.Asada_ID, (SUM(s.valor * i.valor) * 10000) / c.valor  AS valor, a.Latitud, a.Longitud FROM indicadorxasada s, indicador i, "+
+                "subcomponente d, componente c, Asada a WHERE s.Indicador_ID = i.ID  and i.Subcomponente_ID=d.ID and d.Componente_ID= c.ID "+
+                "and d.Componente_ID= "+id+" and s.Asada_ID=a.ID GROUP BY (s.Asada_ID)";
         }
 
         let query = "select C.codigo, avg(t.valor) as valor from Asada A, distrito C, Canton Ca, provincia P, ("+s+") t"+
@@ -113,8 +133,17 @@ module.exports = {
                 values.push(x);
 
             }
-            var jsonsites = { "sitios": dictionary, "valores": values }
-            res.send(jsonsites);
+            db.query(k, function(err2,rows2,fields2){
+
+                for (var i = rows2.length - 1; i >= 0; i--) {
+                x= 4-(Math.floor(rows2[i].valor/20));
+                if(x > 4) x=4;
+                if(x < 0) x=0;
+                rows2[i].valor = x;
+                }
+                var jsonsites = { "sitios": dictionary, "valores": values, "asadas": rows2 }
+                res.send(jsonsites);
+            });
         }
         else{
             console.log('Error while performing Query.');

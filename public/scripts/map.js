@@ -4,6 +4,7 @@ var jsonsites;
 
 // array de colores
 var colores=['rgba(234, 77, 70, 0.7)','rgba(232, 215, 75, 0.7)','rgba(72, 118, 90, 0.7)','rgba(22, 155, 220, 0.7)','rgba(22, 87, 205, 0.7)'];
+var colores2=['rgba(156, 26, 18, 1)','rgba(130, 118, 17, 1)','rgba(35, 58, 45, 1)','rgba(10, 66, 92, 1)','rgba(9, 32, 74, 1)'];
 
 
 // array de Styles de OL
@@ -26,16 +27,18 @@ var styles = [new ol.style.Style({
                 })];
 
 // en proceso
-/*var shapestyles = [new ol.style.Style({
+
+function shapestyles(valor) {
+  return new ol.style.Style({
         image: new ol.style.RegularShape(({
-          fill: fill,
-            stroke: stroke,
-            points: 3,
-            radius: 10,
-            rotation: Math.PI / 4,
-            angle: 0
+            fill: new ol.style.Fill({color: colores[valor]}),
+            stroke: new ol.style.Stroke({color: colores2[valor] , width: 1}),
+            points: 4,
+            radius: 5,
+            angle: Math.PI
         }))
-      })]*/
+      });
+}
 
 // Función toma codigo de distrito y busca en jsonsites si existe riesgo en el, de no ser asi lo pinta transparente
 var styleFunction = function(feature) {
@@ -98,6 +101,15 @@ layers.push(new ol.layer.Tile({
 layers.push(new ol.layer.Tile({
                 source: new ol.source.TileWMS({
                   url: 'http://geos.snitcr.go.cr/be/IGN_5/wms?',
+                  params: {'LAYERS': 'limitecantonal_5k', 'TILED': true},
+                  serverType: 'geoserver',
+                  transition: 0
+                })
+              }))
+
+layers.push(new ol.layer.Tile({
+                source: new ol.source.TileWMS({
+                  url: 'http://geos.snitcr.go.cr/be/IGN_5/wms?',
                   params: {'LAYERS': 'limiteprovincial_5k', 'TILED': true},
                   serverType: 'geoserver',
                   transition: 0
@@ -106,25 +118,32 @@ layers.push(new ol.layer.Tile({
 
 //en proceso
 
-     /* var madrid = new ol.Feature({
-        geometry: new ol.geom.Point(ol.proj.fromLonLat([-85.3868195,10.5685225])),
-      });
+      puntos = [];
 
-      var stroke = new ol.style.Stroke({color: 'black', width: 2});
-      var fill = new ol.style.Fill({color: 'red'});
+      for(var i= 0; i< jsonsites.asadas.length; i++){
+        puntos.push(new ol.Feature({
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([parseFloat(jsonsites.asadas[i].Latitud),parseFloat(jsonsites.asadas[i].Longitud)])),
+      }));
+        puntos[i].setStyle(shapestyles(jsonsites.asadas[i].valor));
+      }
 
-      madrid.setStyle();
-
+      
 
       var vectorSource = new ol.source.Vector({
-        features: [madrid]
+        features: puntos
       });
-
       var vectorLayer = new ol.layer.Vector({
         source: vectorSource
       });
+      layers.push(vectorLayer);
 
-      layers.push(vectorLayer);*/
+
+var select_interaction = new ol.interaction.Select({
+  condition: ol.events.condition.click
+});
+
+select_interaction.on('select', function (e) { 
+});
 
 // carga en mapa
 var map = new ol.Map({
@@ -135,4 +154,6 @@ var map = new ol.Map({
               zoom: 8
             })
           });
+map.addInteraction(select_interaction);
+
   });
