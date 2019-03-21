@@ -1,5 +1,28 @@
 module.exports = {
     // crear nueva asada
+
+    getCrudAsadas: (req,res) =>{
+        if(req.session.value==1){
+
+        let query = "select a.Nombre,p.Nombre as Provincia,c.Nombre as Canton,d.Nombre as Distrito,ai.Ubicacion from asada a left join asadainfo ai on a.ID=ai.Asada_ID inner join distrito d on a.distrito_id=d.Codigo inner join canton c on d.Canton_ID=c.ID inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID;";
+        // execute query
+        db.query(query, function(err, rows, fields) {
+        if (!err){
+            res.render('pages/crudAsadasR.ejs', {"rows":rows, "usuario": req.session.usuario})}
+        else{
+            console.log('Error while performing Query.');
+            res.redirect('/');
+            }
+
+        });
+
+        }
+        else
+            res.redirect('/');
+    },
+
+
+
     getCrudComponente: (req,res) =>{
         if(req.session.value==1){
 

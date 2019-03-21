@@ -9,15 +9,15 @@ const app = express();
 const PORT = process.env.PORT || 3000
 
 //llamar funciones de controller.js
-const {getCrudComponente,saveComponente,getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador} = require('./routes/cruds');
+const {getCrudComponente,saveComponente,getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador,getCrudAsadas} = require('./routes/cruds');
 const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites} = require('./routes/controller');
 
 
 //conexion de BD
 const db = mysql.createConnection ({
     host     : '127.0.0.1',
-    user     : 'userasada',
-    password : 'asada',
+    user     : 'root',
+    password : '201723',
     database : 'proyecto_asada'
 });
 
@@ -63,6 +63,7 @@ app.get('/getComponente', getComponente);
 app.get('/componente', getCrudComponente);
 app.get('/subcomponente', getCrudSubcomponente);
 app.get('/indicador', getCrudIndicador);
+app.get('/asadas', getCrudAsadas);
 app.get('/saveComponente', saveComponente);
 app.get('/savesubcomponente', saveSubComponente);
 app.get('/indicador/:id', getIndicador);
