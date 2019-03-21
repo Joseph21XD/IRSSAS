@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000
 
 //llamar funciones de controller.js
-const {getCrudComponente,saveComponente,getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudUsuario} = require('./routes/cruds');
+const {getCrudComponente,saveComponente,getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudUsuario, getCrudAsadas, newAsada, createAsada} = require('./routes/cruds');
 const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites} = require('./routes/controller');
 
 
@@ -63,6 +63,7 @@ app.get('/getComponente', getComponente);
 app.get('/componente', getCrudComponente);
 app.get('/subcomponente', getCrudSubcomponente);
 app.get('/indicador', getCrudIndicador);
+app.get('/asadas', getCrudAsadas);
 app.get('/saveComponente', saveComponente);
 app.get('/savesubcomponente', saveSubComponente);
 app.get('/indicador/:id', getIndicador);
@@ -71,6 +72,8 @@ app.get('/updateindicador', updateIndicador);
 app.get('/newindicador', newIndicador);
 app.post('/createindicador', createIndicador);
 app.get('/usuario', getCrudUsuario);
+app.get('/newasada',newAsada);
+app.post('/createasada',createAsada);
 
 
 // llamada al puerto 
