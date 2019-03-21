@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000
 
 //llamar funciones de controller.js
-const {getCrudComponente,saveComponente,getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador} = require('./routes/cruds');
+const {getCrudComponente,saveComponente,getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudUsuario} = require('./routes/cruds');
 const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites} = require('./routes/controller');
 
 
@@ -70,6 +70,7 @@ app.get('/deleteindicador', deleteIndicador);
 app.get('/updateindicador', updateIndicador);
 app.get('/newindicador', newIndicador);
 app.post('/createindicador', createIndicador);
+app.get('/usuario', getCrudUsuario);
 
 
 // llamada al puerto 
