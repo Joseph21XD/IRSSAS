@@ -238,3 +238,25 @@ function eliminarNominal(){
 
 
 }
+function saveAsada(id){
+
+	updates = [];
+
+	for (var i = 0; i < actualizados.length;  i++) {
+			updates.push(document.getElementById(actualizados[i]).value);
+	}
+
+	var parameters = { "actualizados": actualizados,"updates":updates,"id": id};
+	$.get('/saveasada',parameters,function(data) {
+     }).done(function(res){     	
+
+		});
+
+    return true;
+
+
+
+
+
+
+}
