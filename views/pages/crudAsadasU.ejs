@@ -20,7 +20,7 @@
                                 <i class="glyphicon glyphicon-leaf"></i>
                                 <span></span>
                             </button>
-                            <form action="/asada" onsubmit=" return updateAsada(<%=asada.ID%>);" id="compsub">
+                            <form action="/asadas" onsubmit=" return saveAsada(<%=asada.ID%>);" id="compsub">
                                 <button type="submit" style="visibility: hidden;"  id="savebutton" class="btn btn-info navbar-btn" >Guardar cambios</button>
                                 <p style="color: #f00;" id="error"></p>
                             </form>
@@ -37,74 +37,72 @@
                     <div style="margin: 20px;">
                         <form>
                             
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail4">Código</label>
-                                <input type="text" disabled="" class="form-control" id="Codigo" value="<%=indicador.Codigo%>">
-                            </div>
-                            <div class="form-row"> <!-- ACA VAN UNA FILA CON PROV,CANTON,DIST,UBIC -->
+                            <div class="form-group">
+                                <label for="inputEmail4">ID</label>
+                                <input type="text" disabled="" class="form-control" id="Codigo" value="<%=asada.ID%>">
                             </div>
 
-                            <div class="form-group">
-                            <label for="Nombre">Nombre</label>
-                                <textarea class="form-control" style="resize: none;" id="Nombre" onchange="updateComponent(this.id);" rows="3"><%=indicador.Nombre%></textarea>
-                            </div>
 
                             <div class="form-group">
-                            <label for="Descripcion">Descripción</label>
-                                <textarea class="form-control" style="resize: none;" id="Descripcion" onchange="updateComponent(this.id)" rows="3"><%=indicador.Descripcion%></textarea>
+                            <label for="Nombre">Nombre de ASADA</label>
+                                <textarea class="form-control" style="resize: none;" id="Nombre" onchange="updateComponent(this.id);" rows="3" maxlength="250"><%=asada.Nombre%></textarea>
                             </div>
 
+
                             <div class="form-group">
-                                <label for="Subcomponente">Subcomponente</label>
-                                <select  id="Subcomponente" class="form-control" onchange="updateComponent(this.id)">
-                                        <option selected="" value="<%=indicador.Subcomponente_ID%>"><%=indicador.Subcomponente%></option>
-                                        <%subs.forEach(function(sub){%>
-                                            <%if(sub.ID != indicador.Subcomponente_ID){%>
-                                            <option value="<%=sub.ID%>"><%=sub.Nombre%></option>
+                                <label for="Distrito">Provincia / Cantón / Distrito</label>
+                                <select  id="Distrito_ID" class="form-control" onchange="updateComponent(this.id)">
+                                        <option selected="" value="<%=asada.Distrito_ID%>"><%=asada.Provincia%>-<%=asada.Canton%>-<%=asada.Distrito%></option>
+                                        <%distritos.forEach(function(distrito){%>
+                                            <%if(distrito.Codigo != asada.Distrito_ID){%>
+                                            <option value="<%=distrito.Codigo%>"><%=distrito.Distrito%></option>
                                             <%}%>
                                         <%});%>
                                 </select>
                             </div>
+                            <!-- LATITUD --Y LONGITUD -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="Latitud">Latitud</label>
+                                        <input type="number" step="any" class="form-control" style="resize: none;" id="Latitud" onchange="updateComponent(this.id);" maxlength="50" value="<%=asada.Latitud%>">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="Longitud">Longitud</label>
+                                        <input type="number" step="any" class="form-control" style="resize: none;" id="Longitud" onchange="updateComponent(this.id);" maxlength="50" value="<%=asada.Longitud.replace('\r','')%>">
+                                </div>
+
+                            </div>
+
 
                             <div class="form-group">
-                                <label for="Medida">Medida</label>
-                                <input type="text" disabled="" class="form-control" id="Medida" value="<%=indicador.Medida%>">
+                            <label for="Ubicacion">Dirección exacta</label>
+                                <textarea class="form-control" style="resize: none;" id="Ubicacion" onchange="updateComponent(this.id);" rows="3" maxlength="200"><%=asada.Ubicacion%></textarea>
                             </div>
 
                             <div class="form-group">
-                                <label for="Formula">Fórmula</label>
-                                <input type="text" class="form-control" id="Formula" onchange="updateComponent(this.id)"  value="<%=indicador.Formula%>">
+                            <label for="Telefono">Teléfono</label>
+                                <textarea class="form-control" style="resize: none;" id="Telefono" onchange="updateComponent(this.id);" rows="3" maxlength="15"><%=asada.Telefono%></textarea>
                             </div>
+                            
 
                             <div class="form-group">
-                                <label for="Fuente">Fuente</label>
-                                <input type="text" class="form-control" id="Fuente" onchange="updateComponent(this.id)" value="<%=indicador.Fuente%>">
+                            <label for="Poblacion">Población</label>
+                                <textarea class="form-control" style="resize: none;" id="Nombre" onchange="updateComponent(this.id);" rows="3" maxlength="6"><%=asada.Poblacion%></textarea>
                             </div>
 
-                            <div class="form-group">
-                                <label for="Url">URL</label>
-                                <input type="text" class="form-control" id="Url" onchange="updateComponent(this.id)" value="<%=indicador.Url%>">
-                            </div>
 
                             <div class="form-group">
-                                <label for="Responsable">Responsable</label>
-                                <input type="text" class="form-control" id="Responsable" onchange="updateComponent(this.id)" value="<%=indicador.Responsable%>">
+                            <label for="Enlace">Enlace (Url)</label>
+                                <textarea class="form-control" style="resize: none;" id="Url" onchange="updateComponent(this.id);" rows="3" maxlength="200"><%=asada.Url%></textarea>
                             </div>
 
-                            <div class="form-group">
-                                <label for="Periodo">Periodo</label>
-                                <input type="text" class="form-control" id="Periodo" onchange="updateComponent(this.id)" value="<%=indicador.Periodo%>">
-                            </div>
+
 
                             <div class="form-group">
-                                <label for="Frecuencia">Frecuencia</label>
-                                <input type="text" class="form-control" id="Frecuencia" onchange="updateComponent(this.id)" value="<%=indicador.Frecuencia%>">
+                            <label for="Nombre">Abonados</label>
+                                <textarea class="form-control" style="resize: none;" id="cantAbonados" onchange="updateComponent(this.id);" maxlength="6" ><%=asada.cantAbonados%></textarea>
                             </div>
 
-                            <div class="form-group">
-                            <label for="Observaciones">Observaciones</label>
-                                <textarea class="form-control" style="resize: none;" id="Observaciones" onchange="updateComponent(this.id)" rows="3"><%=indicador.Observaciones%></textarea>
-                            </div>
 
                         </form>
                     </div>

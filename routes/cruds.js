@@ -1,10 +1,10 @@
 module.exports = {
     // crear nueva asada
 
-    getCrudAsadas: (req,res) =>{
+    getCrudAsadasR: (req,res) =>{
         if(req.session.value==1){
 
-        let query = "select a.Nombre,p.Nombre as Provincia,c.Nombre as Canton,d.Nombre as Distrito,ai.Ubicacion from asada a left join asadainfo ai on a.ID=ai.Asada_ID inner join distrito d on a.distrito_id=d.Codigo inner join canton c on d.Canton_ID=c.ID inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID;";
+        let query = "select a.ID,a.Nombre,p.Nombre as Provincia,c.Nombre as Canton,d.Nombre as Distrito,ai.Ubicacion from asada a left join asadainfo ai on a.ID=ai.Asada_ID inner join distrito d on a.distrito_id=d.Codigo inner join canton c on d.Canton_ID=c.ID inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID;";
         // execute query
         db.query(query, function(err, rows, fields) {
         if (!err){
@@ -20,6 +20,76 @@ module.exports = {
         else
             res.redirect('/');
     },
+
+    getCrudAsadasU: (req,res) =>{
+        if(req.session.value==1){
+
+        let query = 'select a.ID,a.Latitud,a.Longitud,a.Nombre,p.Nombre as Provincia, a.Distrito_id,c.Nombre as Canton,d.Nombre as Distrito,ai.Ubicacion,ai.Telefono,ai.Poblacion,ai.Url,ai.cantAbonados ' +
+                    'from asada a left join asadainfo ai on a.ID=ai.Asada_ID inner join distrito d on a.distrito_id=d.Codigo inner join canton c on d.Canton_ID=c.ID inner join provincia p on '+
+                    'p.ID=c.Provincia_ID where d.Provincia_ID=p.ID and a.ID='+ req.params.id +' ;';
+        let query2 = 'select concat(p.Nombre, " - ", c.Nombre, " - ", d.Nombre) as Distrito, d.Codigo from distrito d inner join canton c on d.Canton_ID=c.ID inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID;';
+        // execute query
+        db.query(query, function(err, rows, fields) {
+        if (!err){
+
+            db.query(query2, function(err2, rows2, fields2) {
+            if (!err2){
+                console.log(rows[0]);
+                res.render('pages/crudAsadasU.ejs', {"asada":rows[0], "distritos":rows2, "usuario": req.session.usuario})
+
+
+            }
+            else{
+                console.log('Error while performing Query.');
+                res.redirect('/');
+                }
+
+            });
+
+
+        }
+        else{
+            console.log('Error while performing Query.');
+            res.redirect('/');
+            }
+
+        });
+
+        }
+        else
+            res.redirect('/');
+    },    
+
+
+    saveAsada: (req,res) =>{
+        if(req.session.value==1){
+
+            var actualizados = req.query.actualizados;
+            var updates = req.query.updates;
+            var id_asada = req.query.id;
+
+            console.log("bryan");
+            console.log(actualizados); //LISTA DE CAMPOS QUE SE VAN A ACTUALIZAR
+            console.log(updates); //LISTA DE LOS VALORES DE LOS CAMPOS QUE SE VAN A ACTUALIZAR
+            console.log(id_asada);
+            console.log("bryanFIN");
+
+            let updateAsada;
+            //hago los querys, valido si es int o varchar, se hace inner join al update, para trabajar lo 2 al mismo tiempo
+            for(var i= 0; i<actualizados.length;i++){                
+                updateAsada = "update asada a, asadainfo ai set ";
+                updateAsada = updateAsada + actualizados[i] + " = '" + updates[i] + "' where a.ID = "+ id_asada + " and ai.Asada_ID= " + id_asada + " ;";
+                console.log(updateAsada);
+                db.query(updateAsada);
+            }
+
+            
+
+        }
+        else
+            res.redirect('/');
+    },
+
 
 
 
