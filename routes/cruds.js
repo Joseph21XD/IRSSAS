@@ -509,7 +509,7 @@ module.exports = {
                 keys = Object.keys(req.body);
                 for (var i=0; i< keys.length; i++) {
                     if(IDs.includes(keys[i]))
-                        console.log(req.body[])
+                        console.log(req.body[keys[i]])
                 }
             });
             res.redirect("/main");
