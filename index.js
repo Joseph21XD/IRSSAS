@@ -9,8 +9,8 @@ const app = express();
 const PORT = process.env.PORT || 3000
 
 //llamar funciones de controller.js
-const {getCrudComponente,saveComponente,getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudUsuario, getCrudAsadas, newAsada, createAsada} = require('./routes/cruds');
-const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites} = require('./routes/controller');
+const {getCrudComponente,saveComponente,getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudUsuario, getCrudAsadas, newAsada, createAsada,deleteAsada, crudFormularios, sendForm} = require('./routes/cruds');
+const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo} = require('./routes/controller');
 
 
 //conexion de BD
@@ -74,7 +74,12 @@ app.post('/createindicador', createIndicador);
 app.get('/usuario', getCrudUsuario);
 app.get('/newasada',newAsada);
 app.post('/createasada',createAsada);
-
+app.get('/deleteasada', deleteAsada);
+app.get('/selected', selected);
+app.get('/grafico', grafico);
+app.get('/getRiesgo', getRiesgo);
+app.get('/crudFormularios', crudFormularios);
+app.post('/sendForm', sendForm);
 
 // llamada al puerto 
 app.listen(PORT, () => {

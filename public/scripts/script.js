@@ -15,5 +15,41 @@ function changeComponent(tipo, id, nombre){
 		else{
 			$("#mycomponent").html(nombre);
 		}
+		
 		});
 };
+
+function graficoAranna(){
+
+	var value= document.getElementById("listAsada").value;
+
+	var parameters = { "id": value};
+	$.get('/getRiesgo',parameters,function(data) {
+		new Chart(document.getElementById("radar-chart"), {
+        type: 'radar',
+        data: {
+        labels: data.componentes,
+        datasets: [
+            {
+            label: data.nombre,
+            fill: true,
+            backgroundColor: "rgba(25,61,102,0.2)",
+            borderColor: "rgba(25,61,102,1)",
+            pointBorderColor: "#fff",
+            pointBackgroundColor: "rgba(179,181,198,1)",
+            data: data.valores
+            }
+        ]
+        },
+        options: {
+        title: {
+            display: true,
+            text: 'Nivel de Riesgo de la ASADA'
+        }
+        }
+    });
+
+      
+     });
+
+}

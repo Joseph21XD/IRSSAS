@@ -50,7 +50,6 @@ module.exports = {
         var actualizados = req.query.actualizados;
         var borrados = req.query.borrados;
 
-        console.log(req.query);
 
         if(!(borrados === undefined)){
         borrados.forEach(function(element) {
@@ -112,7 +111,6 @@ module.exports = {
         var actualizados = req.query.actualizados;
         var borrados = req.query.borrados;
 
-        console.log(req.query);
 
         if(!(borrados === undefined)){
         borrados.forEach(function(element) {
@@ -123,13 +121,13 @@ module.exports = {
         if(!(actualizados === undefined)){
 
             actualizados.forEach(function(element) {
-            db.query("update subcomponente set nombre='"+element.nombre+"', valor="+element.valor+", componente_ID="+element.componente+" where id= "+element.id+";");
+            db.query("update subcomponente set nombre='"+element.nombre+"', valor="+element.valor+", componente_ID="+element.componente+", siglas='"+element.siglas+"' where id= "+element.id+";");
         });
         }
 
         if(!(nuevos === undefined)){
         nuevos.forEach(function(element) {
-            db.query("insert into subcomponente(nombre, valor, componente_ID) values('"+element.nombre+"',"+element.valor+", "+element.componente+"  );");
+            db.query("insert into subcomponente(nombre, valor, componente_ID, siglas, cantpreguntas) values('"+element.nombre+"',"+element.valor+", "+element.componente+", '"+element.siglas+"', 0  );");
         });
         }
 
@@ -214,9 +212,7 @@ module.exports = {
         var valores = req.query.valores;
         var id = req.query.indicador;
         var aux;
-        console.log("_____");
-        console.log(req.query);
-        console.log("_____");
+        
 
         if(!(actualizacion === undefined)){            
 
@@ -227,19 +223,18 @@ module.exports = {
 
                 else if(actualizacion[i]=="Subcomponente"){
 
-                    console.log("JAJA_"+valores[i]);
+                    
                     db.query("select i.Codigo, s.ID from indicador i inner join subcomponente s on i.Subcomponente_ID=s.ID where s.ID="+valores[i]+" order by 1 DESC;", 
                         function(err,rows,fields){
                         if(!err){
                             if(rows.length!=0){
-                                console.log("Hola "+rows[0].ID);
-                                console.log(rows[0]);
+                                
                                 var k = rows[0].Codigo.split("-");
                                 db.query("update indicador set Codigo= '"+k[0]+"-"+(parseInt(k[1])+1)+"' where ID="+id+" ;");
                                 return true;
                             }
                             else{
-                                console.log("sexo con licho "+aux);
+                                
                                 db.query("select Siglas from subcomponente where ID="+aux+" ;", function(err2,rows2,fields2){
                                     if(!err2){
                                         db.query("update indicador set Codigo= '"+rows2[0].Siglas+"-1' where ID="+id+" ;");      
@@ -280,7 +275,7 @@ module.exports = {
                         if(!err2){
                             res.render('pages/crudIndicadoresC.ejs', {"usuario": req.session.usuario, "subs":rows2, "meds":rows});
                         }else{
-                            console.log('Error while performing Query.');
+                            
                             res.redirect('/');
                         }
                     });
@@ -399,6 +394,55 @@ module.exports = {
                 }
             });
             res.redirect('/asadas');
+        },
+
+        deleteAsada: (req,res) =>{
+            if(req.session.value==1){
+        
+            var borrados = req.query.borrados;
+            if(!(borrados === undefined)){            
+            borrados.forEach(function(element) {
+                db.query("delete from asada where id="+element+" ;");
+            });
+            }
+            }
+        },
+
+        crudFormularios: (req,res) =>{
+            if(req.session.value==1){
+                let query="select * from indicador;";
+                let query2="select * from nominal;";
+                db.query(query,function(err,rows,fields){
+                    if(!err){
+                        db.query(query2,function(err2,rows2,fields2){
+                            if(!err2){
+                                res.render('pages/crudFormularios.ejs',{"usuario": req.session.usuario, "indicadores":rows, "nominales":rows2});
+                            }else{
+                                res.redirect('/');
+                            }
+                        });
+                    }else{
+                        res.redirect('/');
+                    }
+                });
+            }else{
+                res.redirect('/');
+            }
+        },
+
+        sendForm: (req, res) =>{
+            db.query("select * from Lineal", function(err,rows,fields){
+                IDs=[];
+                rows.forEach(function(row){
+                    IDs.push(row.Indicador_ID);
+                })
+                keys = Object.keys(req.body);
+                for (var i=0; i< keys.length; i++) {
+                    if(IDs.includes(keys[i]))
+                        console.log(req.body[])
+                }
+            });
+            res.redirect("/main");
         }
 
 

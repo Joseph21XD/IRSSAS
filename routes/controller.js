@@ -1,8 +1,23 @@
 module.exports = {
     //Función de inicio, carga el mapa
     getHomePage: (req, res) => {
+    	if(req.session.value==1){
+			res.redirect('/main');   		
+    	}
+    	else{
         req.session.value= 0;
-        res.render('pages/index.ejs',{"error":""});  
+        res.render('pages/index.ejs',{"error":""});}
+    },
+
+    grafico: (req, res) => {
+    	if(req.session.value==1){
+        let query = "select a.ID, a.Nombre from Asada a;";
+        db.query(query, function(err,rows,fields){
+        	res.render('pages/grafArana.ejs',{"usuario": req.session.usuario, "asadas":rows });
+        });
+        }
+        else
+        	res.redirect('/');
     },
 
     //Función enviar datos del mapa al script map.js del frontend
@@ -159,6 +174,34 @@ module.exports = {
         req.session.value=0;
         console.log("Logout");
         res.redirect('/');
+    },
+
+    selected: (req,res) =>{
+        console.log("Jiji");
+        console.log(req.query.id);
+    },
+
+    getRiesgo: (req,res) =>{
+    	console.log(req.query.id);
+        console.log("Jaja Saludos");
+        let query= "SELECT a.Nombre as asada, c.Nombre, (SUM(s.valor * i.valor) * 10000) / c.valor  AS valor FROM indicadorxasada s, indicador i, "+
+        "subcomponente d, componente c, asada a WHERE s.Indicador_ID = i.ID  and i.Subcomponente_ID=d.ID and d.Componente_ID= c.ID "+
+        "and s.Asada_ID="+req.query.id+" and s.Asada_ID=a.ID GROUP BY a.Nombre, c.Nombre;";
+        db.query(query, function(err,rows,fields){
+            if(!err){
+                componentes = [];
+                valores = [];
+                for (var i = rows.length - 1; i >= 0; i--) {
+                    componentes.push(rows[i].Nombre);
+                    valores.push(parseFloat(rows[i].valor));
+                }
+                res.send({"nombre": rows[0].asada, "componentes": componentes, "valores": valores});
+            }
+            else{
+                res.redirect('/');
+            }
+
+        });
     }
 
 
