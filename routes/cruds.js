@@ -410,6 +410,67 @@ module.exports = {
             });
         });
         res.redirect('/indicador');
-    }
+        },
+
+        getCrudUsuario: (req,res) =>{
+        if(req.session.value==1){
+
+        let query = "select * from usuario;";
+        // execute query
+        db.query(query, function(err, rows, fields) {
+        if (!err){
+            res.render('pages/crudUsuarios.ejs', {"rows":rows, "usuario": req.session.usuario})}
+        else{
+            console.log('Error while performing Query.');
+            res.redirect('/');
+            }
+
+        });
+
+        }
+        else
+            res.redirect('/');
+        },
+
+        newAsada: (req,res) => {
+            if(req.session.value==1){
+
+            let query = "select concat(p.Nombre, ' - ', c.Nombre, ' - ', d.Nombre) as Distrito, d.Codigo from distrito d inner join canton c on d.Canton_ID=c.ID inner join provincia p on  p.ID=c.Provincia_ID where d.Provincia_ID=p.ID ;";
+
+            db.query(query, function(err, rows, fields) {
+            if (!err){
+                    res.render('pages/crudAsadasC.ejs', {"usuario": req.session.usuario, "distritos":rows});
+            }
+            else{
+                console.log('Error while performing Query.');
+                res.redirect('/');
+                }
+
+            });
+
+            }
+            else
+                res.redirect('/'); 
+
+        },
+
+        createAsada: (req,res) =>{
+            console.log(req.body);
+            let query= "insert into asada(ID,Nombre,Distrito_ID,Latitud,Longitud) values("+req.body.ID+",'"+req.body.Nombre+"',"+req.body.Distrito_ID+",'"+req.body.Latitud+"','"+req.body.Longitud+"') ;";            
+            db.query(query, function(err,rows,fields){
+                if(!err){
+                    let query2= "insert into asadainfo(Asada_ID,Ubicacion,Telefono,Poblacion,Url,cantAbonados) values("+req.body.ID+",'"+req.body.Ubicacion+"',"+
+                    "'"+req.body.Telefono+"','"+req.body.Poblacion+"','"+req.body.Url+"','"+req.body.cantAbonados+"') ;";
+                    db.query(query2);
+                }
+                else{
+                    console.log('Error while performing Query.');
+                    res.redirect('/asadas');
+                }
+            });
+            res.redirect('/asadas');
+        }
+
+
 
 };
