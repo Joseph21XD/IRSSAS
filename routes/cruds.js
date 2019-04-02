@@ -317,6 +317,53 @@ module.exports = {
             });
         });
         res.redirect('/indicador');
+    },
+	
+	getCrudUsuario: (req,res) =>{
+        if(req.session.value==1){
+
+        let query = "select * from usuario;";
+        // execute query
+        db.query(query, function(err, rows, fields) {
+        if (!err){
+            res.render('pages/crudUsuarios.ejs', {"rows":rows, "usuario": req.session.usuario})}
+        else{
+            console.log('Error while performing Query.');
+            res.redirect('/');
+            }
+
+        });
+
+        }
+        else
+            res.redirect('/');
+    },
+	
+    saveUsuario: (req,res) =>{
+		// console.log(req.query.borrados)
+        if(req.session.value==1){
+			var nuevos = req.query.nuevos;
+			var actualizados = req.query.actualizados;
+			var borrados = req.query.borrados;
+			
+			if(!(borrados === undefined)){
+			borrados.forEach(function(element) {
+				db.query("delete from usuario where id= "+element+";");
+			});
+			}
+
+			if(!(actualizados === undefined)){
+				actualizados.forEach(function(element) {
+				db.query("update usuario set nombre='"+element.nombre+"', usuario='"+element.usuario+"', contrasenna='"+element.contrasenna+"', tipo='"+element.tipo+"' where id= "+element.id+";");
+			});
+			}
+
+			if(!(nuevos === undefined)){
+				nuevos.forEach(function(element) {
+				db.query("insert into usuario(nombre, usuario, contrasenna, tipo) values('"+element.nombre+"', '"+element.usuario+"', '"+element.contrasenna+"', '"+element.tipo+"');");
+			});
+			}			
+        }
     }
 
 };
