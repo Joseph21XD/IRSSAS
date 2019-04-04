@@ -2,13 +2,14 @@
 <html>
     <head>
         <% include ../partials/header %>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     </head>
 
     <body>
 
         <div class="wrapper">
             <!-- Sidebar Holder -->
-            <% include ../partials/latAdmin %>
+            <% include ../partials/lateral %>
             <!-- Page Content Holder -->
             <div id="content">
 
@@ -20,6 +21,7 @@
                                 <i class="glyphicon glyphicon-leaf"></i>
                                 <span></span>
                             </button>
+                            
                         </div>
 
                         <div style="float: right;">
@@ -27,29 +29,23 @@
                                 <form action="/logout">
                                     <button type="submit" class="btn btn-info navbar-btn">Cerrar Sesión</button>
                                 </form>
-                            </div>                           
+                            </div>       
                         </div>
+
                     </div>
-                    <div style="margin: 20px;">
-                        <h1 align="center" style="color: #002855;">Bienvenido a IRSSAS, <%= usuario.Nombre %></h1>
-                        <p align="justify">Bienvenidos a la herramienta IRSSAS, la cual determina el riesgo asociado a
-                        la prestación del suministro de agua y saneamiento en zonas rurales de Costa Rica.
-                        Para garantizar la prestación del servicio de agua y saneamiento en forma
-                        sostenible, se requiere controlar los siguientes factores:
-                        Evitar la contaminación del recurso hídrico con un buen saneamiento
-                        Proteger las fuentes de agua
-                        Invertir en infraestructura (captación, conducción, tratamiento,
-                        almacenamiento, desinfección y distribución)
-                        Contar con poblaciones cuyas condiciones socioeconómicas sean las más
-                        adecuadas para responder a un desarrollo sostenible.
-                        Contar con poblaciones concientizadas ambientalmente y saludable
-                        Tomar acciones de prevención ante los riesgos asociado a la vulnerabilidad
-                        territorio  
-                        A partir de estos se construyen los cinco grandes componentes del IRSSAS a
-                        saber: Recurso hídrico, Saneamiento, Educación, Desarrollo económico y social
-                        de la región y riesgos naturales asociados al territorio, a la vez, algunos de estos
-                        componentes se subdividen en subcomponentes.</p>
-                    </div>
+                    <div>
+    <div class="form-group">
+        <h3>Asadas</h3>
+        <select id="listAsada" class="form-control hideinput" onchange="graficoAranna();">
+            <%asadas.forEach(function(asada){%>
+            <option value="<%=asada.ID%>"><%=asada.Nombre%></option>
+            <%});%>
+        </select>
+    </div>
+    <div id="ID_DIV">
+        <canvas id="radar-chart" ></canvas>
+    </div>
+    </div>
                 </nav>
             </div>
         </div>
@@ -83,7 +79,11 @@
 
             });
         </script>
+        <script src="scripts/ol.js"></script>
         <script src="scripts/map.js"></script>
         <script src="scripts/script.js"></script>
+        <script type="text/javascript">
+            graficoAranna();
+        </script>
     </body>
 </html>

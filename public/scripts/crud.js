@@ -125,14 +125,16 @@ function addSubComponent(){
 	var cell3 = row.insertCell(2);
 	var cell4 = row.insertCell(3);
 	var cell5 = row.insertCell(4);
+	var cell6 = row.insertCell(5);
 
 	nuevos.push(lastRow);
 
 	cell1.innerHTML = lastRow ;
-	cell2.innerHTML = '<input type="text" class="form-control hideinput" name="name-'+lastRow+'" value="COMPONENTE NUEVO">';
+	cell2.innerHTML = '<input type="text" class="form-control hideinput" name="name-'+lastRow+'" value="SUBCOMPONENTE NUEVO">';
 	cell3.innerHTML = document.getElementById("selectlist").innerHTML;
 	cell4.innerHTML = '<input type="number" class="form-control hideinput" name="value-'+lastRow+'" value="0">';
-	cell5.innerHTML = '<i class="glyphicon glyphicon-trash" onclick="deleteComponent(this,'+lastRow+');"></i>';
+	cell5.innerHTML = '<input type="text" class="form-control hideinput" name="siglas-'+lastRow+'" value="SUB">';
+	cell6.innerHTML = '<i class="glyphicon glyphicon-trash" onclick="deleteComponent(this,'+lastRow+');"></i>';
 	document.getElementById("savebutton").style.visibility = "visible";
 };
 
@@ -147,12 +149,12 @@ function saveSubComponent(){
 		if(nuevos.includes(valor)){
 			var x = table.rows[i].cells[1].childNodes[0].value.replace(/"/gi,"");
             x= x.replace(/'/gi,"");
-			news.push({"id": valor, "nombre": x , "componente": table.rows[i].cells[2].childNodes[0].value , "valor": parseInt(table.rows[i].cells[3].childNodes[0].value)});
+			news.push({"id": valor, "nombre": x , "componente": table.rows[i].cells[2].childNodes[0].value , "valor": parseInt(table.rows[i].cells[3].childNodes[0].value), "siglas": table.rows[i].cells[4].childNodes[0].value });
 		}
 		else if(actualizados.includes(valor)){
 			var x = table.rows[i].cells[1].childNodes[0].value.replace(/"/gi,"");
             x= x.replace(/'/gi,"");
-			updates.push({"id": valor, "nombre": x , "componente": table.rows[i].cells[2].childNodes[0].value, "valor": parseInt(table.rows[i].cells[3].childNodes[0].value)});
+			updates.push({"id": valor, "nombre": x , "componente": table.rows[i].cells[2].childNodes[0].value, "valor": parseInt(table.rows[i].cells[3].childNodes[0].value), "siglas": table.rows[i].cells[4].childNodes[0].value });
 		}
 	}
 	
@@ -196,14 +198,14 @@ function updateIndicador(id){
 }
 
 function cambiarMedida(id){
-	if(id=="1"){
+	if(id=="1" || id=="2"){
 		document.getElementById("Nominal").style.display = "none";
 		document.getElementById("Lineal").style.display = "none";
 	}else{
 		document.getElementById("Nominal").style.display = "none";
 		document.getElementById("Lineal").style.display = "block";
 	}
-	if(id=="4")
+	if(id=="5")
 		document.getElementById("Nominal").style.display = "block";
 
 }
@@ -236,6 +238,34 @@ function eliminarNominal(){
 	if(document.getElementById("contador").value == "1")
 		document.getElementById("borranominal").style.display = "none";
 
+
+}
+
+function deleteAsada(){
+	
+	var parameters = { "borrados": borrados};
+	$.get('/deleteAsada',parameters,function(data) {
+     }).done(function(res){     	
+		});
+     return true;
+
+}
+
+function saveAsada(id){
+
+	updates = [];
+
+	for (var i = 0; i < actualizados.length;  i++) {
+			updates.push(document.getElementById(actualizados[i]).value);
+	}
+
+	var parameters = { "actualizados": actualizados,"updates":updates,"id": id};
+	$.get('/saveasada',parameters,function(data) {
+     }).done(function(res){     	
+
+		});
+
+    return true;
 
 }
 
@@ -316,4 +346,3 @@ function saveUser(){
 		});
      return true;
 }
-

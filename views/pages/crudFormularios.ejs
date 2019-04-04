@@ -20,7 +20,7 @@
                                 <i class="glyphicon glyphicon-leaf"></i>
                                 <span></span>
                             </button>
-                            <form action="/subcomponente" onsubmit=" return saveSubComponent();" id="compsub">
+                            <form action="/componente" onsubmit=" return saveComponent();" id="compsub">
                                 <button type="submit" style="visibility: hidden;"  id="savebutton" class="btn btn-info navbar-btn" >Guardar cambios</button>
                                 <p style="color: #f00;" id="error"></p>
                             </form>
@@ -34,59 +34,59 @@
                             </div>                           
                         </div>
                     </div>
+                    <form action="/sendForm" method="POST">
                     <div style="margin: 20px;">
+
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">Componente</th>
-                                    <th scope="col">Porcentaje</th>
-                                    <th scope="col">Siglas</th>
-                                    <th scope="col">Eliminar</th>
+                                    <th scope="col">Pregunta</th>
+                                    <th scope="col">Respuesta</th>
                                 </tr>
                             </thead>
                         <tbody id="componenttable">
-                                <%rows.forEach(function(componente, index) {%>
+                                <%indicadores.forEach(function(indicador, index) {%>
                                 <tr>
-                                    <td><%=componente.ID%></td>
-                                    <td><input type="text" class="form-control hideinput" onchange="updateComponent(<%= componente.ID%>)" name="name-<%=componente.ID%>" value="<%=componente.Nombre%>"></td>
-                                    <td><select class="form-control hideinput" onchange="updateComponent(<%= componente.ID%>)" name="comp-<%=componente.ID%>">
-                                        <option selected="" value="<%=componente.Componente_ID%>"><%=componente.Componente%></option>
-                                        <%comps.forEach(function(comp){%>
-                                            <%if(comp.ID != componente.Componente_ID){%>
-                                            <option value="<%=comp.ID%>"><%=comp.Nombre%></option>
+                                    <td><%=indicador.Nombre%></td>
+                                    <%if(indicador.Medida_ID==1){%>
+                                    <td><select class="form-control hideinput" name="<%=indicador.ID%>">
+                                        <option value="0">SI</option>    
+                                        <option value="1">NO</option>
+                                    </select>
+                                    </td>
+                                    <%}else if(indicador.Medida_ID==2){%>
+                                    <td><select class="form-control hideinput" name="<%=indicador.ID%>">
+                                        <option value="1">SI</option>    
+                                        <option value="0">NO</option>
+                                    </select>
+                                    </td>
+                                    <%}else if(indicador.Medida_ID==3){%>
+                                    <td><input type="number" step="any" min="0" max="100" required class="form-control hideinput" placeholder="0-100" name="<%=indicador.ID%>"></td>
+                                    <%}else if(indicador.Medida_ID==4){%>
+                                    <td><input type="number" step="1" min="0" required class="form-control hideinput" placeholder="Número Entero" name="<%=indicador.ID%>"></td>
+                                    <%}else{%>
+                                        <td><select class="form-control hideinput"  name="<%=indicador.ID%>">
+                                        <%nominales.forEach(function(nominal,index){%>
+                                            <%if(nominal.Indicador_ID==indicador.ID){%>
+                                                <option value="<%=nominal.Porcentaje%>"><%=nominal.Simbolo%> <%=nominal.Valor%></option>
                                             <%}%>
                                         <%});%>
-                                    </select></td>
-                                    <td><input type="number" min="0" step="1" max="100" class="form-control hideinput" onchange="updateComponent(<%= componente.ID%>)" name="value-<%=componente.ID%>" value="<%=componente.Valor%>"></td>
-                                    <td><input type="text" class="form-control hideinput" onchange="updateComponent(<%= componente.ID%>)" name="siglas-<%=componente.ID%>" value="<%=componente.Siglas%>"></td>
-                                    <td><i class="glyphicon glyphicon-trash" onclick="deleteComponent(this, <%=componente.ID%>);"></i></td>
+                                        </select></td>
+                                    <%}%>
                                 </tr>
                                 <%});%>
                         </tbody>
                         </table>
+
                     </div>
                     <div id="divbutton" style=" position: absolute; bottom: 6px; right: 8px;">
-                        <button type="button" onclick="addSubComponent();" class="btn btn-info navbar-btn">
-                                <i class="glyphicon glyphicon-plus"></i>
-                                <span></span>
-                        </button>
+                        <button type="submit" class="btn btn-info navbar-btn">Guardar Formulario</button>
                     </div>
+                    </form>
                 </nav>
             </div>
         </div>
 
-        <div id="selectlist" hidden><select class="form-control hideinput" name="esta">
-                                        <%comps.forEach(function(comp, index){%>
-                                            <% if( index == 0 ){%>
-                                            <option selected value="<%=comp.ID%>"><%=comp.Nombre%></option>
-                                            <%} else {%>
-                                            <option value="<%=comp.ID%>"><%=comp.Nombre%></option>
-                                            <%}%>
-                                        <%});%>
-                                    </select>
-        </div>
 
         <!-- jQuery CDN -->
         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>

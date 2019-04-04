@@ -1,5 +1,98 @@
 module.exports = {
     // crear nueva asada
+
+    getCrudAsadasR: (req,res) =>{
+        if(req.session.value==1){
+
+        let query = "select a.ID,a.Nombre,p.Nombre as Provincia,c.Nombre as Canton,d.Nombre as Distrito,ai.Ubicacion from asada a left join asadainfo ai on a.ID=ai.Asada_ID inner join distrito d on a.distrito_id=d.Codigo inner join canton c on d.Canton_ID=c.ID inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID;";
+        // execute query
+        db.query(query, function(err, rows, fields) {
+        if (!err){
+            res.render('pages/crudAsadasR.ejs', {"rows":rows, "usuario": req.session.usuario})}
+        else{
+            console.log('Error while performing Query.');
+            res.redirect('/');
+            }
+
+        });
+
+        }
+        else
+            res.redirect('/');
+    },
+
+    getCrudAsadasU: (req,res) =>{
+        if(req.session.value==1){
+
+        let query = 'select a.ID,a.Latitud,a.Longitud,a.Nombre,p.Nombre as Provincia, a.Distrito_id,c.Nombre as Canton,d.Nombre as Distrito,ai.Ubicacion,ai.Telefono,ai.Poblacion,ai.Url,ai.cantAbonados ' +
+                    'from asada a left join asadainfo ai on a.ID=ai.Asada_ID inner join distrito d on a.distrito_id=d.Codigo inner join canton c on d.Canton_ID=c.ID inner join provincia p on '+
+                    'p.ID=c.Provincia_ID where d.Provincia_ID=p.ID and a.ID='+ req.params.id +' ;';
+        let query2 = 'select concat(p.Nombre, " - ", c.Nombre, " - ", d.Nombre) as Distrito, d.Codigo from distrito d inner join canton c on d.Canton_ID=c.ID inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID;';
+        // execute query
+        db.query(query, function(err, rows, fields) {
+        if (!err){
+
+            db.query(query2, function(err2, rows2, fields2) {
+            if (!err2){
+                console.log(rows[0]);
+                res.render('pages/crudAsadasU.ejs', {"asada":rows[0], "distritos":rows2, "usuario": req.session.usuario})
+
+
+            }
+            else{
+                console.log('Error while performing Query.');
+                res.redirect('/');
+                }
+
+            });
+
+
+        }
+        else{
+            console.log('Error while performing Query.');
+            res.redirect('/');
+            }
+
+        });
+
+        }
+        else
+            res.redirect('/');
+    },    
+
+
+    saveAsada: (req,res) =>{
+        if(req.session.value==1){
+
+            var actualizados = req.query.actualizados;
+            var updates = req.query.updates;
+            var id_asada = req.query.id;
+
+            console.log("bryan");
+            console.log(actualizados); //LISTA DE CAMPOS QUE SE VAN A ACTUALIZAR
+            console.log(updates); //LISTA DE LOS VALORES DE LOS CAMPOS QUE SE VAN A ACTUALIZAR
+            console.log(id_asada);
+            console.log("bryanFIN");
+
+            let updateAsada;
+            //hago los querys, valido si es int o varchar, se hace inner join al update, para trabajar lo 2 al mismo tiempo
+            for(var i= 0; i<actualizados.length;i++){                
+                updateAsada = "update asada a, asadainfo ai set ";
+                updateAsada = updateAsada + actualizados[i] + " = '" + updates[i] + "' where a.ID = "+ id_asada + " and ai.Asada_ID= " + id_asada + " ;";
+                console.log(updateAsada);
+                db.query(updateAsada);
+            }
+
+            
+
+        }
+        else
+            res.redirect('/');
+    },
+
+
+
+
     getCrudComponente: (req,res) =>{
         if(req.session.value==1){
 
@@ -27,7 +120,6 @@ module.exports = {
         var actualizados = req.query.actualizados;
         var borrados = req.query.borrados;
 
-        console.log(req.query);
 
         if(!(borrados === undefined)){
         borrados.forEach(function(element) {
@@ -89,7 +181,6 @@ module.exports = {
         var actualizados = req.query.actualizados;
         var borrados = req.query.borrados;
 
-        console.log(req.query);
 
         if(!(borrados === undefined)){
         borrados.forEach(function(element) {
@@ -100,13 +191,13 @@ module.exports = {
         if(!(actualizados === undefined)){
 
             actualizados.forEach(function(element) {
-            db.query("update subcomponente set nombre='"+element.nombre+"', valor="+element.valor+", componente_ID="+element.componente+" where id= "+element.id+";");
+            db.query("update subcomponente set nombre='"+element.nombre+"', valor="+element.valor+", componente_ID="+element.componente+", siglas='"+element.siglas+"' where id= "+element.id+";");
         });
         }
 
         if(!(nuevos === undefined)){
         nuevos.forEach(function(element) {
-            db.query("insert into subcomponente(nombre, valor, componente_ID) values('"+element.nombre+"',"+element.valor+", "+element.componente+"  );");
+            db.query("insert into subcomponente(nombre, valor, componente_ID, siglas, cantpreguntas) values('"+element.nombre+"',"+element.valor+", "+element.componente+", '"+element.siglas+"', 0  );");
         });
         }
 
@@ -191,9 +282,7 @@ module.exports = {
         var valores = req.query.valores;
         var id = req.query.indicador;
         var aux;
-        console.log("_____");
-        console.log(req.query);
-        console.log("_____");
+        
 
         if(!(actualizacion === undefined)){            
 
@@ -204,19 +293,18 @@ module.exports = {
 
                 else if(actualizacion[i]=="Subcomponente"){
 
-                    console.log("JAJA_"+valores[i]);
+                    
                     db.query("select i.Codigo, s.ID from indicador i inner join subcomponente s on i.Subcomponente_ID=s.ID where s.ID="+valores[i]+" order by 1 DESC;", 
                         function(err,rows,fields){
                         if(!err){
                             if(rows.length!=0){
-                                console.log("Hola "+rows[0].ID);
-                                console.log(rows[0]);
+                                
                                 var k = rows[0].Codigo.split("-");
                                 db.query("update indicador set Codigo= '"+k[0]+"-"+(parseInt(k[1])+1)+"' where ID="+id+" ;");
                                 return true;
                             }
                             else{
-                                console.log("sexo con licho "+aux);
+                                
                                 db.query("select Siglas from subcomponente where ID="+aux+" ;", function(err2,rows2,fields2){
                                     if(!err2){
                                         db.query("update indicador set Codigo= '"+rows2[0].Siglas+"-1' where ID="+id+" ;");      
@@ -257,7 +345,7 @@ module.exports = {
                         if(!err2){
                             res.render('pages/crudIndicadoresC.ejs', {"usuario": req.session.usuario, "subs":rows2, "meds":rows});
                         }else{
-                            console.log('Error while performing Query.');
+                            
                             res.redirect('/');
                         }
                     });
@@ -364,6 +452,94 @@ module.exports = {
 			});
 			}			
         }
-    }
+    },
+
+	newAsada: (req,res) => {
+		if(req.session.value==1){
+
+		let query = "select concat(p.Nombre, ' - ', c.Nombre, ' - ', d.Nombre) as Distrito, d.Codigo from distrito d inner join canton c on d.Canton_ID=c.ID inner join provincia p on  p.ID=c.Provincia_ID where d.Provincia_ID=p.ID ;";
+
+		db.query(query, function(err, rows, fields) {
+		if (!err){
+				res.render('pages/crudAsadasC.ejs', {"usuario": req.session.usuario, "distritos":rows});
+		}
+		else{
+			console.log('Error while performing Query.');
+			res.redirect('/');
+			}
+
+		});
+
+		}
+		else
+			res.redirect('/'); 
+
+	},
+
+	createAsada: (req,res) =>{
+		console.log(req.body);
+		let query= "insert into asada(ID,Nombre,Distrito_ID,Latitud,Longitud) values("+req.body.ID+",'"+req.body.Nombre+"',"+req.body.Distrito_ID+",'"+req.body.Latitud+"','"+req.body.Longitud+"') ;";            
+		db.query(query, function(err,rows,fields){
+			if(!err){
+				let query2= "insert into asadainfo(Asada_ID,Ubicacion,Telefono,Poblacion,Url,cantAbonados) values("+req.body.ID+",'"+req.body.Ubicacion+"',"+
+				"'"+req.body.Telefono+"','"+req.body.Poblacion+"','"+req.body.Url+"','"+req.body.cantAbonados+"') ;";
+				db.query(query2);
+			}
+			else{
+				console.log('Error while performing Query.');
+				res.redirect('/asadas');
+			}
+		});
+		res.redirect('/asadas');
+	},
+
+	deleteAsada: (req,res) =>{
+		if(req.session.value==1){
+	
+		var borrados = req.query.borrados;
+		if(!(borrados === undefined)){            
+		borrados.forEach(function(element) {
+			db.query("delete from asada where id="+element+" ;");
+		});
+		}
+		}
+	},
+
+	crudFormularios: (req,res) =>{
+		if(req.session.value==1){
+			let query="select * from indicador;";
+			let query2="select * from nominal;";
+			db.query(query,function(err,rows,fields){
+				if(!err){
+					db.query(query2,function(err2,rows2,fields2){
+						if(!err2){
+							res.render('pages/crudFormularios.ejs',{"usuario": req.session.usuario, "indicadores":rows, "nominales":rows2});
+						}else{
+							res.redirect('/');
+						}
+					});
+				}else{
+					res.redirect('/');
+				}
+			});
+		}else{
+			res.redirect('/');
+		}
+	},
+
+	sendForm: (req, res) =>{
+		db.query("select * from Lineal", function(err,rows,fields){
+			IDs=[];
+			rows.forEach(function(row){
+				IDs.push(row.Indicador_ID);
+			})
+			keys = Object.keys(req.body);
+			for (var i=0; i< keys.length; i++) {
+				if(IDs.includes(keys[i]))
+					console.log(req.body[keys[i]])
+			}
+		});
+		res.redirect("/main");
+	}
 
 };

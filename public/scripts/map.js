@@ -142,7 +142,10 @@ var select_interaction = new ol.interaction.Select({
   condition: ol.events.condition.click
 });
 
-select_interaction.on('select', function (e) { 
+select_interaction.on('select', function (e) {
+    var parameters = { "id": e.target.getFeatures().item(0) };
+    $.get('/selected',parameters,function(data) {
+     });
 });
 
 // carga en mapa
