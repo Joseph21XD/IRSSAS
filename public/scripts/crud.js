@@ -270,3 +270,19 @@ function saveAsada(id){
 
 
 }
+
+function valoresForm(){
+	valores=[];
+	var table = document.getElementById("componenttable");
+	for(var i= 0; i< table.rows.length; i++){
+		var select = table.rows[i].cells[1].childNodes[0];
+		if(select.nodeName+""=="SELECT")
+			valores.push(select.options[select.selectedIndex].text);
+		else{
+			valores.push(select.value);
+		}
+	}
+	document.getElementById("ocultos").value=valores+"";
+	return true;
+
+}

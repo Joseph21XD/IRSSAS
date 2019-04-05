@@ -482,11 +482,19 @@ module.exports = {
             if(req.session.value==1){
                 let query="select * from indicador;";
                 let query2="select * from nominal;";
+                let query3="select * from asada"
                 db.query(query,function(err,rows,fields){
                     if(!err){
                         db.query(query2,function(err2,rows2,fields2){
                             if(!err2){
-                                res.render('pages/crudFormularios.ejs',{"usuario": req.session.usuario, "indicadores":rows, "nominales":rows2});
+                                db.query(query3,function(err3,rows3,fields3){
+                                    if(!err3){
+                                        res.render('pages/crudFormularios.ejs',{"usuario": req.session.usuario, "indicadores":rows, "nominales":rows2, "asadas":rows3});
+                                    }else{
+                                        res.redirect('/');        
+                                    }
+                                });
+                                
                             }else{
                                 res.redirect('/');
                             }
@@ -501,15 +509,40 @@ module.exports = {
         },
 
         sendForm: (req, res) =>{
-            db.query("select * from Lineal", function(err,rows,fields){
+            var contador=0.0;
+            db.query("select * from Lineal;", function(err,rows,fields){
+                if(!err){
                 IDs=[];
+                var lista= req.body.ocultos.split(",");
                 rows.forEach(function(row){
-                    IDs.push(row.Indicador_ID);
+                    IDs.push(row.Indicador_ID+"");
                 })
                 keys = Object.keys(req.body);
+                keys.pop();
+                keys.pop();
+                keys.pop();
+
                 for (var i=0; i< keys.length; i++) {
-                    if(IDs.includes(keys[i]))
-                        console.log(req.body[keys[i]])
+                    var x= IDs.indexOf(keys[i]);
+                    if(x != -1){
+                        var exp= parseFloat(req.body[keys[i]])*parseFloat(rows[x].Pendiente) + parseFloat(rows[x].Ordenada)
+                        db.query("delete from historicorespuesta where Indicador_ID="+keys[i]+" and Asada_ID="+req.body.asada+" and año='"+req.body.anno+"' limit 1 ;");
+                        db.query("insert into historicorespuesta select * from indicadorxasada where Indicador_ID="+keys[i]+" and Asada_ID="+req.body.asada+"  ;");
+                        db.query("delete from indicadorxasada where Indicador_ID="+keys[i]+" and Asada_ID="+req.body.asada+" limit 1 ;");
+                        db.query("insert into indicadorxasada(año,Indicador_ID,Asada_ID,Valor,Texto) values('"+req.body.anno+"','"+keys[i]+"','"+req.body.asada+"','"+(1/(1 + Math.pow(Math.E,exp)))+"','"+lista[i+1]+"');");
+                            
+                    }
+                    else{
+                        db.query("delete from historicorespuesta where Indicador_ID="+keys[i]+" and Asada_ID="+req.body.asada+" and año='"+req.body.anno+"' limit 1 ;");
+                        db.query("insert into historicorespuesta select * from indicadorxasada where Indicador_ID="+keys[i]+" and Asada_ID="+req.body.asada+"  ;");
+                        db.query("delete from indicadorxasada where Indicador_ID="+keys[i]+" and Asada_ID="+req.body.asada+" limit 1 ;");
+                        db.query("insert into indicadorxasada(año,Indicador_ID,Asada_ID,Valor,Texto) values('"+req.body.anno+"','"+keys[i]+"','"+req.body.asada+"','"+req.body[keys[i]]+"','"+lista[i+1]+"');");
+
+                    }
+                }
+                }
+                else{
+                    res.redirect('/');
                 }
             });
             res.redirect("/main");

@@ -20,10 +20,6 @@
                                 <i class="glyphicon glyphicon-leaf"></i>
                                 <span></span>
                             </button>
-                            <form action="/componente" onsubmit=" return saveComponent();" id="compsub">
-                                <button type="submit" style="visibility: hidden;"  id="savebutton" class="btn btn-info navbar-btn" >Guardar cambios</button>
-                                <p style="color: #f00;" id="error"></p>
-                            </form>
                         </div>
 
                         <div style="float: right;">
@@ -34,9 +30,20 @@
                             </div>                           
                         </div>
                     </div>
-                    <form action="/sendForm" method="POST">
+                    <form action="/sendForm" method="POST" onsubmit="return valoresForm();">
                     <div style="margin: 20px;">
-
+                        <div class="form-group">
+                            
+                                <label for="asada">ASADA</label>
+                                <select name="asada" class="form-control hideinput">
+                                    <%asadas.forEach(function(asada){%>
+                                        <option value="<%=asada.ID%>"><%=asada.Nombre%></option>
+                                    <%});%>
+                                </select>
+                                <label for="anno">Año</label>
+                                <input class="form-control" type="number" step="1" min="2000" name="anno">
+                            
+                        </div>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -45,6 +52,10 @@
                                 </tr>
                             </thead>
                         <tbody id="componenttable">
+                                <tr hidden>
+                                    <td>Nada</td>
+                                    <td><input type="text" name="ocultos" id="ocultos"></td>
+                                </tr>
                                 <%indicadores.forEach(function(indicador, index) {%>
                                 <tr>
                                     <td><%=indicador.Nombre%></td>
@@ -63,7 +74,7 @@
                                     <%}else if(indicador.Medida_ID==3){%>
                                     <td><input type="number" step="any" min="0" max="100" required class="form-control hideinput" placeholder="0-100" name="<%=indicador.ID%>"></td>
                                     <%}else if(indicador.Medida_ID==4){%>
-                                    <td><input type="number" step="1" min="0" required class="form-control hideinput" placeholder="Número Entero" name="<%=indicador.ID%>"></td>
+                                    <td><input type="number" step="any" min="0" required class="form-control hideinput" placeholder="" name="<%=indicador.ID%>"></td>
                                     <%}else{%>
                                         <td><select class="form-control hideinput"  name="<%=indicador.ID%>">
                                         <%nominales.forEach(function(nominal,index){%>
@@ -116,6 +127,6 @@
 
             });
         </script>
-        <script src="scripts/crud.js"></script>
+        <script src="/scripts/crud.js"></script>
     </body>
 </html>
