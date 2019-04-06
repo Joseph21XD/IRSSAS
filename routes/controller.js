@@ -72,7 +72,7 @@ module.exports = {
 
     // login
     login: (req, res, next) => {
-        let query = "select * from usuario where usuario= '"+ req.body.usr+"' and contrasenna= '"+req.body.pwd+"'";
+        let query = "select u.*,ua.Asada_ID from usuario u left join usuarioxasada ua on u.ID=ua.Usuario_ID where usuario= '"+ req.body.usr+"' and contrasenna= '"+req.body.pwd+"'";
         db.query(query, function(err, rows, fields) {
         if (!err){
             if(rows.length > 0){
@@ -172,7 +172,6 @@ module.exports = {
     // logout
     logout: (req,res) =>{
         req.session.value=0;
-        console.log("Logout");
         res.redirect('/');
     },
 
@@ -182,8 +181,6 @@ module.exports = {
     },
 
     getRiesgo: (req,res) =>{
-    	console.log(req.query.id);
-        console.log("Jaja Saludos");
         let query= "SELECT a.Nombre as asada, c.Nombre, (SUM(s.valor * i.valor) * 10000) / c.valor  AS valor FROM indicadorxasada s, indicador i, "+
         "subcomponente d, componente c, asada a WHERE s.Indicador_ID = i.ID  and i.Subcomponente_ID=d.ID and d.Componente_ID= c.ID "+
         "and s.Asada_ID="+req.query.id+" and s.Asada_ID=a.ID GROUP BY a.Nombre, c.Nombre;";
@@ -195,7 +192,10 @@ module.exports = {
                     componentes.push(rows[i].Nombre);
                     valores.push(parseFloat(rows[i].valor));
                 }
-                res.send({"nombre": rows[0].asada, "componentes": componentes, "valores": valores});
+                if(rows.length!=0)
+                    res.send({"nombre": rows[0].asada, "componentes": componentes, "valores": valores});
+                else
+                    res.send({"nombre": "No existen datos de esta ASADA", "componentes": componentes, "valores": valores});
             }
             else{
                 res.redirect('/');

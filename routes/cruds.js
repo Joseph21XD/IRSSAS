@@ -474,10 +474,12 @@ module.exports = {
 
 
         crudFormularios: (req,res) =>{
-            if(req.session.value==1){
+            if(req.session.value==1 || req.session.value==2){
                 let query="select * from indicador;";
                 let query2="select * from nominal;";
                 let query3="select * from asada"
+                if(req.session.value==2)
+                    query3+=" where "
                 db.query(query,function(err,rows,fields){
                     if(!err){
                         db.query(query2,function(err2,rows2,fields2){
@@ -567,7 +569,21 @@ module.exports = {
 			});
 			}			
         }
-    }
+    },
+
+    getUsuariosAsadas: (req,res) =>{
+        if(req.session.value==1){
+            db.query("select u.*,ua.Asada_ID,a.Nombre as Asada from usuario u left join usuarioxasada ua on u.ID=ua.Usuario_ID left join asada a on ua.Asada_ID=a.ID;", function(err,rows,fields){
+                if(!err){
+                db.query("select a.ID, a.Nombre from asada a;",function(err2,rows2,fields2){
+                    res.render('pages/crudUsuariosAsadas.ejs',{"usuario": req.session.usuario, "usuarios":rows, "asadas":rows2});
+                });
+                }else{
+                    res.redirect("/");
+                }
+            });
+        }
+    },
 
 
 
