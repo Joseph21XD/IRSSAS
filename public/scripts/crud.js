@@ -241,7 +241,6 @@ function eliminarNominal(){
 
 }
 
-
 function deleteAsada(){
 	
 	var parameters = { "borrados": borrados};
@@ -268,7 +267,95 @@ function saveAsada(id){
 
     return true;
 
+}
 
+function addUser(){
+	var table = document.getElementById("usertable");
+	if(table.rows.length!=0)
+	var lastRow = parseInt(table.rows[ table.rows.length - 1 ].cells[0].innerHTML) + 1;
+	else
+	var lastRow = 1;
+
+	var row = table.insertRow();
+
+	var cell1 = row.insertCell(0);
+	var cell2 = row.insertCell(1);
+	var cell3 = row.insertCell(2);
+	var cell4 = row.insertCell(3);
+	var cell5 = row.insertCell(4);
+	var cell6 = row.insertCell(5);
+
+	nuevos.push(lastRow);
+	cell1.innerHTML = lastRow ;
+	cell2.innerHTML = '<input type="text" class="form-control hideinput" name="name-'+lastRow+'" value="USUARIO NUEVO">';
+	cell3.innerHTML = '<input type="text" class="form-control hideinput" name="user-'+lastRow+'" value="new_user">';
+	cell4.innerHTML = '<input type="password" class="form-control hideinput" name="pass-'+lastRow+'" value="12345">';
+	cell5.innerHTML = '<select class="form-control hideinput" name="type-'+lastRow+'"> <option name="type-1" value=1>Superusuario</option> <option name="type-2" value=2>Administrador</option> </select>';
+	cell6.innerHTML = '<i class="glyphicon glyphicon-trash" onclick="deleteUser(this,'+lastRow+');"></i>';
+	document.getElementById("savebutton").style.visibility = "visible";
+};
+
+function updateUser(id){
+	if(!actualizados.includes(id))
+		actualizados.push(id);
+	document.getElementById("savebutton").style.visibility = "visible";
+}
+
+function deleteUser(element, id){
+	element.parentNode.parentNode.parentNode.removeChild(element.parentNode.parentNode);
+	if(!nuevos.includes(id)){
+		borrados.push(id);
+		if(actualizados.includes(id)){
+			actualizados.splice(actualizados.indexOf(id),1);	
+		}
+	}
+	else
+		nuevos.splice(nuevos.indexOf(id),1);
+	document.getElementById("savebutton").style.visibility = "visible";
+};
+
+function saveUser(){
+	estado= true;
+	news=[];
+	updates=[];
+	nameUsers=[];
+	var table = document.getElementById("usertable");
+	var valor = 0;
+	for (var i = table.rows.length - 1; i >= 0; i--) {
+		usuario = parseInt(table.rows[i].cells[0].innerHTML);
+		if(nameUsers.includes(table.rows[i].cells[2].childNodes[0].value)){
+			estado= false;
+			$("#error").html("Error, los usuarios no pueden ser iguales.");
+			i = -1;
+		}
+		else{
+		if(nuevos.includes(usuario)){
+			news.push({"id": usuario, 
+					   "nombre": table.rows[i].cells[1].childNodes[0].value, 
+					   "usuario": table.rows[i].cells[2].childNodes[0].value, 
+					   "contrasenna": table.rows[i].cells[3].childNodes[0].value,
+					   "tipo": table.rows[i].cells[4].childNodes[0].value
+					  });
+		}
+		else if(actualizados.includes(usuario)){
+			updates.push({"id": usuario, 
+						  "nombre": table.rows[i].cells[1].childNodes[0].value, 
+						  "usuario": table.rows[i].cells[2].childNodes[0].value, 
+						  "contrasenna": table.rows[i].cells[3].childNodes[0].value,
+						  "tipo": table.rows[i].cells[4].childNodes[0].value
+					     });
+		}
+		nameUsers.push(table.rows[i].cells[2].childNodes[0].value);
+		}
+	}
+	
+	if(estado){
+	var parameters = { "nuevos": news, "actualizados": updates, "borrados": borrados, "length": table.rows.length};
+	$.get('/saveUsuario',parameters,function(data) {
+     }).done(function(res){     	
+		});
+ 	}
+     return estado;
 }
 
 function valoresForm(){

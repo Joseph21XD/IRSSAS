@@ -167,7 +167,7 @@ module.exports = {
 
         });
 
-    },
+    },	
 
     // logout
     logout: (req,res) =>{

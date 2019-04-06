@@ -34,7 +34,6 @@ module.exports = {
 
             db.query(query2, function(err2, rows2, fields2) {
             if (!err2){
-                console.log(rows[0]);
                 res.render('pages/crudAsadasU.ejs', {"asada":rows[0], "distritos":rows2, "usuario": req.session.usuario})
 
 
@@ -68,18 +67,11 @@ module.exports = {
             var updates = req.query.updates;
             var id_asada = req.query.id;
 
-            console.log("bryan");
-            console.log(actualizados); //LISTA DE CAMPOS QUE SE VAN A ACTUALIZAR
-            console.log(updates); //LISTA DE LOS VALORES DE LOS CAMPOS QUE SE VAN A ACTUALIZAR
-            console.log(id_asada);
-            console.log("bryanFIN");
-
             let updateAsada;
             //hago los querys, valido si es int o varchar, se hace inner join al update, para trabajar lo 2 al mismo tiempo
             for(var i= 0; i<actualizados.length;i++){                
                 updateAsada = "update asada a, asadainfo ai set ";
                 updateAsada = updateAsada + actualizados[i] + " = '" + updates[i] + "' where a.ID = "+ id_asada + " and ai.Asada_ID= " + id_asada + " ;";
-                console.log(updateAsada);
                 db.query(updateAsada);
             }
 
@@ -405,9 +397,9 @@ module.exports = {
             });
         });
         res.redirect('/indicador');
-        },
-
-        getCrudUsuario: (req,res) =>{
+    },
+	
+	getCrudUsuario: (req,res) =>{
         if(req.session.value==1){
 
         let query = "select * from usuario;";
@@ -449,8 +441,8 @@ module.exports = {
 
         },
 
+
         createAsada: (req,res) =>{
-            console.log(req.body);
             let query= "insert into asada(ID,Nombre,Distrito_ID,Latitud,Longitud) values("+req.body.ID+",'"+req.body.Nombre+"',"+req.body.Distrito_ID+",'"+req.body.Latitud+"','"+req.body.Longitud+"') ;";            
             db.query(query, function(err,rows,fields){
                 if(!err){
@@ -466,6 +458,7 @@ module.exports = {
             res.redirect('/asadas');
         },
 
+
         deleteAsada: (req,res) =>{
             if(req.session.value==1){
         
@@ -477,6 +470,8 @@ module.exports = {
             }
             }
         },
+
+
 
         crudFormularios: (req,res) =>{
             if(req.session.value==1){
@@ -546,7 +541,35 @@ module.exports = {
                 }
             });
             res.redirect("/main");
+    },
+	
+    saveUsuario: (req,res) =>{
+        if(req.session.value==1){
+			var nuevos = req.query.nuevos;
+			var actualizados = req.query.actualizados;
+			var borrados = req.query.borrados;
+			
+			if(!(borrados === undefined)){
+			borrados.forEach(function(element) {
+				db.query("delete from usuario where id= "+element+";");
+			});
+			}
+
+			if(!(actualizados === undefined)){
+				actualizados.forEach(function(element) {
+				db.query("update usuario set nombre='"+element.nombre+"', usuario='"+element.usuario+"', contrasenna='"+element.contrasenna+"', tipo='"+element.tipo+"' where id= "+element.id+";");
+			});
+			}
+
+			if(!(nuevos === undefined)){
+				nuevos.forEach(function(element) {
+				db.query("insert into usuario(nombre, usuario, contrasenna, tipo) values('"+element.nombre+"', '"+element.usuario+"', '"+element.contrasenna+"', '"+element.tipo+"');");
+			});
+			}			
         }
+    }
+
+
 
 
 

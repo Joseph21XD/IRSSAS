@@ -20,7 +20,7 @@
                                 <i class="glyphicon glyphicon-leaf"></i>
                                 <span></span>
                             </button>
-                            <form action="/componente" onsubmit=" return saveUsuario();" id="compsub">
+                            <form action="/main" onsubmit=" return saveUser();" id="usersub">
                                 <button type="submit" style="visibility: hidden;"  id="savebutton" class="btn btn-info navbar-btn" >Guardar cambios</button>
                                 <p style="color: #f00;" id="error"></p>
                             </form>
@@ -46,37 +46,32 @@
                                     <th scope="col">Eliminar</th>
                                 </tr>
                             </thead>
-                        <tbody id="componenttable">
-                                <%rows.forEach(function(usuario, index) {%>
+                        <tbody id="usertable">
+                                <%rows.forEach(function(user, index) {%>
                                 <tr>
-                                    <td><%=usuario.ID%></td>
-
-                                    <td><input type="text" class="form-control hideinput" onchange="updateComponent(<%= usuario.ID%>)" name="name-<%=usuario.ID%>" value="<%=usuario.Nombre%>"></td>
-
-                                    <td><input type="text" min="0" step="1" max="100" class="form-control hideinput" onchange="updateComponent(<%= usuario.ID%>)" name="usuario-<%=usuario.ID%>" value="<%=usuario.Usuario%>"></td>
-
-                                    <td><input type="password" min="0" step="1" max="100" class="form-control hideinput" onchange="updateComponent(<%= usuario.ID%>)" name="contrasenna-<%=usuario.ID%>" value="<%=usuario.Contrasenna%>"></td>
-
-                                    <td><select class="form-control" onchange="updateComponent(<%= usuario.ID%>)">
-                                    <%if(usuario.Tipo=="1"){%>
-                        
-                                        <option value="1" selected>Superusuario</option>
-                                        <option value="2">Administrador Asada</option>
-                                    <%}else{%>
-                                        <option value="1">Superusuario</option>
-                                        <option value="2" selected>Administrador Asada</option>
-                                    <%}%>
-                                    </select></td>
-
-                                    <td><i class="glyphicon glyphicon-trash" onclick="deleteComponent(this, <%=usuario.ID%>);"></i></td>
-
+                                    <td><%=user.ID%></td>
+                                    <td><input type="text" class="form-control hideinput" onchange="updateUser(<%= user.ID%>)" name="name-<%=user.ID%>" value="<%=user.Nombre%>"></td>
+                                    <td><input type="text" class="form-control hideinput" disabled onchange="updateUser(<%= user.ID%>)" name="user-<%=user.ID%>" value="<%=user.Usuario%>"></td>
+                                    <td><input type="password" class="form-control hideinput" onchange="updateUser(<%= user.ID%>)" name="pass-<%=user.ID%>" value="<%=user.Contrasenna%>"></td>
+									<td><select class="form-control hideinput" onchange="updateUser(<%= user.ID%>)" name="type-<%=user.ID%>">
+										<%if (user.Tipo == 1){%>
+										<option value=1>Superusuario</option>
+										<option value=2>Administrador</option>										
+										<%} else {%>
+										<option value=2>Administrador</option>
+										<option value=1>Superusuario</option>
+										<% } %>
+									</select></td>
+									<%if (usuario.ID != user.ID) {%>
+                                    <td><i class="glyphicon glyphicon-trash" onclick="deleteUser(this, <%=user.ID%>);"></i></td>
+									<%}%>
                                 </tr>
                                 <%});%>
                         </tbody>
                         </table>
                     </div>
                     <div id="divbutton" style=" position: absolute; bottom: 6px; right: 8px;">
-                        <button type="button" onclick="addUsuario();" class="btn btn-info navbar-btn">
+                        <button type="button" onclick="addUser();" class="btn btn-info navbar-btn">
                                 <i class="glyphicon glyphicon-plus"></i>
                                 <span></span>
                         </button>

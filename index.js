@@ -9,8 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000
 
 //llamar funciones de controller.js
-
-const {getCrudComponente,saveComponente,getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador,getCrudAsadasR,getCrudAsadasU,saveAsada, getCrudUsuario, newAsada, createAsada, deleteAsada, crudFormularios, sendForm} = require('./routes/cruds');
+const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR,getCrudAsadasU, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario} = require('./routes/cruds');
 const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo} = require('./routes/controller');
 
 
@@ -61,13 +60,14 @@ app.get('/main', getMain);
 app.get('/logout', logout);
 app.get('/getSites', getSites);
 app.get('/getComponente', getComponente);
-
 app.get('/componente', getCrudComponente);
 app.get('/subcomponente', getCrudSubcomponente);
 app.get('/indicador', getCrudIndicador);
 app.get('/asadas', getCrudAsadasR);
 app.get('/asadas/:id', getCrudAsadasU);
 app.get('/saveasada', saveAsada);
+app.get('/usuario', getCrudUsuario);
+app.get('/saveUsuario', saveUsuario);
 app.get('/saveComponente', saveComponente);
 app.get('/savesubcomponente', saveSubComponente);
 app.get('/indicador/:id', getIndicador);
