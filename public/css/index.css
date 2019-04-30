@@ -217,8 +217,12 @@ DISPLAY LI UL NAVBAR
     background-color: #193d66;
 }
 
-.glyphicon-trash{
+.glyphicon-trash, .glyphicon-remove-circle{
     color: rgb(239,51,64);
+}
+
+.glyphicon-ok-circle{
+    color: #193d66;
 }
 
 .hideinput{

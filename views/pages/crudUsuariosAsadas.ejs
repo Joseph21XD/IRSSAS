@@ -5,7 +5,10 @@
     </head>
 
     <body>
-
+        <script type="text/javascript">
+            var asada="0";
+            var id="0";
+        </script>
         <div class="wrapper">
             <!-- Sidebar Holder -->
             <% include ../partials/latAdmin %>
@@ -16,11 +19,21 @@
                     <div class="container-fluid">
 
                         <div class="navbar-header">
-                            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
-                                <i class="glyphicon glyphicon-leaf"></i>
-                                <span></span>
-                            </button>
-                            <form action="/main" onsubmit=" return saveUser();" id="usersub">
+                                                        <div class="row-group">
+                                <div class="form-group col-md-5">
+                                    <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                                        <i class="glyphicon glyphicon-leaf"></i>
+                                        <span></span>
+                                    </button>  
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <button type="button" onclick="location.href='/usuario';" class="btn btn-info navbar-btn">
+                                        <i class="glyphicon glyphicon-arrow-left"></i>
+                                        <span></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <form action="/changeAsadaUser" onsubmit=" return saveUserAsada();" id="usersub">
                                 <button type="submit" style="visibility: hidden;"  id="savebutton" class="btn btn-info navbar-btn" >Guardar cambios</button>
                                 <p style="color: #f00;" id="error"></p>
                             </form>
@@ -35,11 +48,18 @@
                         </div>
                     </div>
                     <div style="margin: 20px;">
+                        <label>Asadas</label>
+                        <select id="selector" class="form-control hideinput" onclick="seleccionarAsada();">
+                            <%asadas.forEach(function(asada, index) {%>
+                            <option value="<%=asada.ID%>"><%=asada.Nombre%></option>
+                            <%});%>
+                        </select>
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th>
                                     <th scope="col">Nombre</th>
+                                    <th scope="col">Asada ID</th>
                                     <th scope="col">Asada</th>
                                     <th scope="col">Seleccionar</th>
                                 </tr>
@@ -48,19 +68,20 @@
                                 <%usuarios.forEach(function(user, index) {%>
                                 <tr>
                                     <td><%=user.ID%></td>
-                                    <td><%=user.Nombre></td>
-                                    <td><%=user.Asada%></td>
-                                    <td><i class="glyphicon glyphicon-remove-circle" onclick="seleccionarUsuario(this, <%=user.ID%>);"></i></td>
+                                    <td><%=user.Nombre%></td>
+                                    <%if(user.Asada === null){%>
+                                    <td id="asadaID-<%=user.ID%>"></td>
+                                    <td id="asada-<%=user.ID%>"></td>
+                                    <td><i class="glyphicon glyphicon-remove-circle" id="mark-<%=user.ID%>" onclick="seleccionarUsuario(0, <%=user.ID%>);"></i></td>
+                                    <%}else{%>
+                                    <td id="asadaID-<%=user.ID%>"><%=user.Asada_ID%></td>
+                                    <td id="asada-<%=user.ID%>"><%=user.Asada%></td>
+                                    <td><i class="glyphicon glyphicon-remove-circle" id="mark-<%=user.ID%>" onclick="seleccionarUsuario(<%=user.Asada_ID%>, <%=user.ID%>);"></i></td>
+                                    <%}%>
                                 </tr>
                                 <%});%>
                         </tbody>
                         </table>
-                    </div>
-                    <div id="divbutton" style=" position: absolute; bottom: 6px; right: 8px;">
-                        <button type="button" onclick="addUser();" class="btn btn-info navbar-btn">
-                                <i class="glyphicon glyphicon-plus"></i>
-                                <span></span>
-                        </button>
                     </div>
                 </nav>
             </div>
@@ -98,3 +119,4 @@
         <script src="scripts/crud.js"></script>
     </body>
 </html>
+

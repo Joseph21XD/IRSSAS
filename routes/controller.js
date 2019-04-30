@@ -11,7 +11,9 @@ module.exports = {
 
     grafico: (req, res) => {
     	if(req.session.value==1){
-        let query = "select a.ID, a.Nombre from Asada a;";
+        let query = "select a.ID, a.Nombre from Asada a";
+        if(req.session.usuario.Tipo=="2")
+            query+=" where a.ID="+req.session.usuario.Asada_ID+" ;";
         db.query(query, function(err,rows,fields){
         	res.render('pages/grafArana.ejs',{"usuario": req.session.usuario, "asadas":rows });
         });
@@ -181,9 +183,13 @@ module.exports = {
     },
 
     getRiesgo: (req,res) =>{
-        let query= "SELECT a.Nombre as asada, c.Nombre, (SUM(s.valor * i.valor) * 10000) / c.valor  AS valor FROM indicadorxasada s, indicador i, "+
+        console.log("ENTRA")
+        let s = "";
+        if(req.query.tipo=="historicorespuesta")
+            s="and s.año='"+req.query.anno+"'";
+        let query= "SELECT a.Nombre as asada, c.Nombre, (SUM(s.valor * i.valor) * 10000) / c.valor  AS valor FROM "+req.query.tipo+" s, indicador i, "+
         "subcomponente d, componente c, asada a WHERE s.Indicador_ID = i.ID  and i.Subcomponente_ID=d.ID and d.Componente_ID= c.ID "+
-        "and s.Asada_ID="+req.query.id+" and s.Asada_ID=a.ID GROUP BY a.Nombre, c.Nombre;";
+        "and s.Asada_ID="+req.query.id+" "+s+" and s.Asada_ID=a.ID GROUP BY a.Nombre, c.Nombre;";
         db.query(query, function(err,rows,fields){
             if(!err){
                 componentes = [];
@@ -202,6 +208,59 @@ module.exports = {
             }
 
         });
+    },
+
+    histFormulario: (req,res) =>{
+        if(req.session.value==1){
+            let query = "select a.ID, a.Nombre from Asada a";
+            if(req.session.usuario.Tipo=="2")
+                query+=" where a.ID="+req.session.usuario.Asada_ID+" ;";
+            db.query(query, function(err,rows,fields){
+                if(!err){
+                    res.render('pages/histFormulario.ejs',{"usuario": req.session.usuario, "asadas": rows});
+                }
+            });
+        }else{
+            res.redirect('/');
+        }
+    },
+
+    getAnno: (req,res) =>{
+        if(req.session.value=1){
+            let query = "select distinct(Año) as anno from historicorespuesta where Asada_ID = "+req.query.asada+" ;"
+            db.query(query, function(err,rows,fields){
+                if(!err){
+                    let query2 = "select distinct(Año) as anno from indicadorxasada where Asada_ID = "+req.query.asada+" limit 1 ;"
+                    db.query(query2,function(err2,rows2,fields2){
+                        if(rows2.length!=0)
+                            res.send({"annos": rows, "anno": rows2[0].anno});
+                        else
+                            res.send({"annos": rows, "anno": 0});
+                    })
+                }
+            });
+
+        }
+    },
+
+    
+    getRespuestas: (req,res) =>{
+        console.log(req.query);
+        if(req.session.value=1){
+            let query = "select h.texto as respuesta, i.Nombre as pregunta from "+req.query.tipo+" h inner join indicador i on h.Indicador_ID=i.ID where h.Año like '"+req.query.anno+"' and h.Asada_ID="+req.query.asada+" ;"
+            db.query(query, function(err,rows,fields){
+                if(!err){
+                    res.send({"preguntas": rows});
+                }
+            });
+        }
+    },
+
+    comparaMapas: (req,res) =>{
+        if(req.session.value==1){
+            res.render('pages/comparaMapas.ejs',{"error":""});
+        }else
+            res.redirect('/');
     }
 
 

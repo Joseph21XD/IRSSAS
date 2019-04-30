@@ -9,12 +9,18 @@ const app = express();
 const PORT = process.env.PORT || 3000
 
 //llamar funciones de controller.js
-const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR,getCrudAsadasU, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario} = require('./routes/cruds');
-const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo} = require('./routes/controller');
+const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR,getCrudAsadasU, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario, getUsuariosAsadas,setUsuariosAsada} = require('./routes/cruds');
+const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo, histFormulario, getAnno, getRespuestas,comparaMapas} = require('./routes/controller');
 
 
 
 //conexion de BD
+/*
+  host     : process.env.RDS_HOSTNAME,
+  user     : process.env.RDS_USERNAME,
+  password : process.env.RDS_PASSWORD,
+  port     : process.env.RDS_PORT
+*/
 const db = mysql.createConnection ({
     host     : '127.0.0.1',
     user     : 'userasada',
@@ -84,6 +90,12 @@ app.get('/grafico', grafico);
 app.get('/getRiesgo', getRiesgo);
 app.get('/crudFormularios', crudFormularios);
 app.post('/sendForm', sendForm);
+app.get('/changeAsadaUser', getUsuariosAsadas);
+app.get('/setUsuariosAsada',setUsuariosAsada);
+app.get('/histFormulario', histFormulario);
+app.get('/getAnno', getAnno);
+app.get('/getRespuestas',getRespuestas);
+app.get('/comparaMapas', comparaMapas)
 
 // llamada al puerto 
 app.listen(PORT, () => {
