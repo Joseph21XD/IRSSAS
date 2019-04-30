@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../partials/header %>
+    </head>
+
+    <body>
+
+        <div class="wrapper">
+            <!-- Sidebar Holder -->
+            <% include ../partials/lateral %>
+            <!-- Page Content Holder -->
+            <div id="content">
+
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+
+                        <div class="navbar-header">
+                            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                                <i class="glyphicon glyphicon-leaf"></i>
+                                <span></span>
+                            </button>
+                            
+                        </div>
+
+                        <div style="float: right;">
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <form action="/visor">
+                                    <button type="submit" class="btn btn-info navbar-btn">Volver al mapa</button>
+                                </form>
+                            </div>       
+                        </div>
+
+                    </div>
+                    <div>
+    <div class="form-group">
+        <h1 align="center" style="color: #002855;">Información General</h1>
+        <br>
+        <h4>Instituto Costarricense de Acueductos y Alcantarillados</h4>
+        <br>
+        <h4>Ubicación: Rohrmoser (Pavas), San José, Costa Rica</h4>
+        <br>
+        <h4>Teléfono: 2242 5000</h4>
+        <br>
+        <h4>Sitio Web: https://www.aya.go.cr</h4>
+    </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+
+        <!-- jQuery CDN -->
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <!-- Bootstrap Js CDN -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <!-- jQuery Custom Scroller CDN -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+               
+
+                $('#sidebarCollapse').on('click', function () {
+                    $('#sidebar, #content').toggleClass('active');
+                    $('.collapse.in').toggleClass('in');
+                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                });
+
+                $("#divrisk").click(function(){
+                     $("#divrisk").toggle("slow","linear");
+                });
+
+                $("#buttonrisk").click(function(){
+                     $("#divrisk").toggle("slow","linear");
+                });
+
+
+            });
+        </script>
+        <script src="scripts/ol.js"></script>
+        <script src="scripts/map.js"></script>
+        <script src="scripts/script.js"></script>
+    </body>
+</html>

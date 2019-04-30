@@ -9,17 +9,17 @@ const app = express();
 const PORT = process.env.PORT || 3000
 
 //llamar funciones de controller.js
-const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR,getCrudAsadasU, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario} = require('./routes/cruds');
-const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo} = require('./routes/controller');
+const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR, getCrudAsadasU, getPresentAsada, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario} = require('./routes/cruds');
+const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo, getAsada, getInfoGeneral} = require('./routes/controller');
 
 
 
 //conexion de BD
 const db = mysql.createConnection ({
     host     : '127.0.0.1',
-    user     : 'userasada',
-    password : 'asada',
-    database : 'proyecto_asada'
+    user     : 'root',
+    password : '1234',
+    database : 'PROYECTO_ASADA'
 });
 
 db.connect((err) => {
@@ -65,6 +65,7 @@ app.get('/subcomponente', getCrudSubcomponente);
 app.get('/indicador', getCrudIndicador);
 app.get('/asadas', getCrudAsadasR);
 app.get('/asadas/:id', getCrudAsadasU);
+app.get('/presentacionAsadas', getPresentAsada);
 app.get('/saveasada', saveAsada);
 app.get('/usuario', getCrudUsuario);
 app.get('/saveUsuario', saveUsuario);
@@ -82,7 +83,9 @@ app.get('/deleteasada', deleteAsada);
 app.get('/selected', selected);
 app.get('/grafico', grafico);
 app.get('/getRiesgo', getRiesgo);
+app.get('/getAsada', getAsada);
 app.get('/crudFormularios', crudFormularios);
+app.get('/infoGeneral', getInfoGeneral);
 app.post('/sendForm', sendForm);
 
 // llamada al puerto 

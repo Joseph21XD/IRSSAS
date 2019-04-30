@@ -19,6 +19,10 @@ module.exports = {
         else
         	res.redirect('/');
     },
+    
+    getInfoGeneral: (req, res) => {
+        res.render('pages/infoGeneral.ejs',{"usuario": req.session.usuario});
+    },
 
     //Función enviar datos del mapa al script map.js del frontend
     getSites: (req,res) => {
@@ -72,7 +76,7 @@ module.exports = {
 
     // login
     login: (req, res, next) => {
-        let query = "select u.*,ua.Asada_ID from usuario u left join usuarioxasada ua on u.ID=ua.Usuario_ID where usuario= '"+ req.body.usr+"' and contrasenna= '"+req.body.pwd+"'";
+        let query = "select u.*,ua.Asada_ID from USUARIO u left join USUARIOXASADA ua on u.ID=ua.Usuario_ID where usuario= '"+ req.body.usr+"' and contrasenna= '"+req.body.pwd+"'";
         db.query(query, function(err, rows, fields) {
         if (!err){
             if(rows.length > 0){
@@ -202,7 +206,30 @@ module.exports = {
             }
 
         });
-    }
+    },
+	
+	getAsada: (req, res) => {
+		if(req.session.value==1){
+
+		let query = 'select a.ID, a.Nombre, p.Nombre as Provincia, a.Distrito_id, c.Nombre as Canton, d.Nombre as Distrito, ai.Ubicacion, ai.Telefono, ai.Poblacion, ai.Url, ai.cantAbonados ' +
+		'from asada a left join asadainfo ai on a.ID=ai.Asada_ID inner join distrito d on a.distrito_id=d.Codigo inner join canton c on d.Canton_ID=c.ID inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID and a.ID='+ req.params.id +' ;';
+
+		db.query(query, function(err, rows, fields) {
+		if (!err){
+			res.render('pages/tarjetasAsadas.ejs', {"asada":rows[0], "usuario": req.session.usuario})
+		}
+		else{
+			console.log('Error while performing Query.');
+			res.redirect('/');
+		}
+		
+		});
+		
+		}
+        else
+            res.redirect('/');
+
+	}
 
 
 
