@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000
 //llamar funciones de controller.js
 
 const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR,getCrudAsadasU, getPresentAsada, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario, getUsuariosAsadas,setUsuariosAsada} = require('./routes/cruds');
-const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo,  histFormulario, getAnno, getRespuestas,comparaMapas getAsada, getInfoGeneral} = require('./routes/controller');
+const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo,  histFormulario, getAnno, getRespuestas,comparaMapas, getAsada, getInfoGeneral} = require('./routes/controller');
 
 
 

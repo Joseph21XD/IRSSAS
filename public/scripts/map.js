@@ -119,6 +119,33 @@ layers.push(new ol.layer.Tile({
 
 //en proceso
 
+
+var style1 = [
+    /*new ol.style.Style({
+        image: new ol.style.Icon(({
+            scale: 0.7,
+            rotateWithView: false,
+            anchor: [0.5, 1],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'fraction',
+            opacity: 1,
+            src: '/images/gota.png'
+        })),
+        zIndex: 5
+    }),*/
+    new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: 3,
+            fill: new ol.style.Fill({
+                color: 'rgba(98,175,205,0.5)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'rgba(98,175,205,1)'
+            })
+        })
+    })
+];
+
       puntos = [];
 
       var x;
@@ -138,7 +165,7 @@ layers.push(new ol.layer.Tile({
         }));
 
 
-        //puntos[i].setStyle(shapestyles(jsonsites.asadas[i].valor));
+        puntos[i].setStyle(style1);
       }
 
       
@@ -150,19 +177,6 @@ layers.push(new ol.layer.Tile({
         source: vectorSource
       });
       layers.push(vectorLayer);
-
-
-/*var select_interaction = new ol.interaction.Select({
-  condition: ol.events.condition.click
-});
-
-select_interaction.on('select', function (e) {
-    var parameters = { "id": e.selected[0].getProperties()};
-    $.get('/selected',parameters,function(data) {
-     });
-});*/
-
-// carga en mapa
 
 var container = document.getElementById('popup');
 var content = document.getElementById('popup-content');
