@@ -55,6 +55,21 @@ function graficoAranna(){
 	var value= document.getElementById("listAsada").value;
     aranna(value,"indicadorxasada",0)
 
+};
+
+function presentarAsada(){
+    
+    var asada = document.getElementById("listAsada").value;
+    var values_list = asada.split(",");
+    console.log(values_list);
+    
+    $("div.present").html(
+        "<br><h4>" + values_list[0] + "</h4><br>" + 
+        "<h4>UBICACIÓN: " + values_list[1] + ", " + values_list[2] + ", " + values_list[3] + "</h4><br>" + 
+        "<h4>SEÑAS ADICIONALES: " + values_list[4] + "</h4><br>" + 
+        "<h4>TELÉFONO: " + values_list[5] + "</h4><br>" +
+        "<h4>URL: " + values_list[6] + "</h4><br>" 
+    );
 }
 
 function getAnnos(object){

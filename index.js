@@ -9,8 +9,10 @@ const app = express();
 const PORT = process.env.PORT || 3000
 
 //llamar funciones de controller.js
-const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR,getCrudAsadasU, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario, getUsuariosAsadas,setUsuariosAsada} = require('./routes/cruds');
-const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo, histFormulario, getAnno, getRespuestas,comparaMapas} = require('./routes/controller');
+
+const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR,getCrudAsadasU, getPresentAsada, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario, getUsuariosAsadas,setUsuariosAsada} = require('./routes/cruds');
+const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo,  histFormulario, getAnno, getRespuestas,comparaMapas getAsada, getInfoGeneral} = require('./routes/controller');
+
 
 
 
@@ -76,6 +78,7 @@ app.get('/subcomponente', getCrudSubcomponente);
 app.get('/indicador', getCrudIndicador);
 app.get('/asadas', getCrudAsadasR);
 app.get('/asadas/:id', getCrudAsadasU);
+app.get('/presentacionAsadas', getPresentAsada);
 app.get('/saveasada', saveAsada);
 app.get('/usuario', getCrudUsuario);
 app.get('/saveUsuario', saveUsuario);
@@ -93,7 +96,9 @@ app.get('/deleteasada', deleteAsada);
 app.get('/selected', selected);
 app.get('/grafico', grafico);
 app.get('/getRiesgo', getRiesgo);
+app.get('/getAsada', getAsada);
 app.get('/crudFormularios', crudFormularios);
+app.get('/infoGeneral', getInfoGeneral);
 app.post('/sendForm', sendForm);
 app.get('/changeAsadaUser', getUsuariosAsadas);
 app.get('/setUsuariosAsada',setUsuariosAsada);
