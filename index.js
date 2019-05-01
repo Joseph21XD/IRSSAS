@@ -20,6 +20,11 @@ const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, s
   user     : process.env.RDS_USERNAME,
   password : process.env.RDS_PASSWORD,
   port     : process.env.RDS_PORT
+    host     : 'aa1p73vf0lmbvdr.cyzdjp7x4zfl.us-east-2.rds.amazonaws.com',
+    user     : 'joseph',
+    password : '12345678',
+    database : 'ebdb',
+    port : '3306'
 */
 const db = mysql.createConnection ({
     host     : '127.0.0.1',

@@ -1,6 +1,7 @@
 //variables globales
 var parameters = { 'id': 0 };
 var jsonsites;
+var jsonsites2;
 
 // array de colores
 var colores=['rgba(234, 77, 70, 0.7)','rgba(232, 215, 75, 0.7)','rgba(72, 118, 90, 0.7)','rgba(22, 155, 220, 0.7)','rgba(22, 87, 205, 0.7)'];
@@ -59,6 +60,24 @@ var styleFunction = function(feature) {
                 });
       };
 
+var styleFunction2 = function(feature) {
+        var id =parseInt(feature.get('CODIGO'));
+        var index = jsonsites2.sitios.indexOf(id);
+
+        if(index == -1)
+          return styles[0];
+        else
+          return new ol.style.Style({
+                    fill: new ol.style.Fill({
+                          color: colores[jsonsites2.valores[index]]
+                    }),
+                    stroke: new ol.style.Stroke({
+                          color: colores[jsonsites2.valores[index]]
+
+                    })
+                });
+      };
+
 // Array de capas por defecto, capas OSM y urbano 5000
 var layers = [
               new ol.layer.Tile({
@@ -74,9 +93,25 @@ var layers = [
               })
             ]
 
+layers2 = [
+              new ol.layer.Tile({
+                source: new ol.source.OSM()
+              }),
+              new ol.layer.Tile({
+                source: new ol.source.TileWMS({
+                  url: 'http://geos.snitcr.go.cr/be/IGN_5/wms?',
+                  params: {'LAYERS': 'urbano_5000', 'TILED': true},
+                  serverType: 'geoserver',
+                  transition: 0
+                })
+              })
+            ]
+
 // funcion jquery para obtener datos de riesgo de asadas
-$.get('/getSites',function(data) {
-      jsonsites = data;
+var parameters= {"tipo": "1"};
+$.get('/getSites',parameters,function(data) {
+      jsonsites = data.jsonsites1;
+      jsonsites2 = data.jsonsites2;
      }).done(function(res){
 
  // Carga capa de distritos, llama a función stylefunction
@@ -88,6 +123,14 @@ $.get('/getSites',function(data) {
                 style: styleFunction
               }))
 
+  layers2.push(    new ol.layer.Vector({
+                source: new ol.source.Vector({
+                  url: 'geojson/District.geojson',
+                  format: new ol.format.GeoJSON()
+                }),
+                style: styleFunction2
+              }))
+/*
 // Carga capas de distritos y provincial para sobreponerlas
 layers.push(new ol.layer.Tile({
                 source: new ol.source.TileWMS({
@@ -115,6 +158,8 @@ layers.push(new ol.layer.Tile({
                   transition: 0
                 })
               }))
+*/
+
 
 // carga en mapa
 var map = new ol.Map({
@@ -128,7 +173,7 @@ var map = new ol.Map({
 
 var map2 = new ol.Map({
             target: 'map2',
-            layers: layers,
+            layers: layers2,
             view: new ol.View({
               center: ol.proj.fromLonLat([-84.097118,9.934691]),
               zoom: 8

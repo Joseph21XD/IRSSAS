@@ -102,3 +102,17 @@ function getRespuestas(val,tipo){
         document.getElementById("radar-chart-div").style.visibility = "hidden";
      }
 }
+
+
+function comparar(){
+  layers[2].setStyle(null);
+  layers2[2].setStyle(null);
+  var parameters = { "tipo": "2", "anno": document.getElementById("anno1").value,  "anno2": document.getElementById("anno2").value};
+  $.get('/getSites',parameters,function(data) {
+      jsonsites = data.jsonsites1;
+      jsonsites2 = data.jsonsites2;
+     }).done(function(res){       
+        layers[2].setStyle(styleFunction);
+        layers2[2].setStyle(styleFunction2);
+    });
+};

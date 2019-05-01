@@ -75,8 +75,9 @@ var layers = [
             ]
 
 // funcion jquery para obtener datos de riesgo de asadas
-$.get('/getSites',function(data) {
-      jsonsites = data;
+var parameters= {"tipo": "1"};
+$.get('/getSites',parameters,function(data) {
+      jsonsites = data.jsonsites1;
      }).done(function(res){
 
  // Carga capa de distritos, llama a función stylefunction
@@ -120,11 +121,24 @@ layers.push(new ol.layer.Tile({
 
       puntos = [];
 
+      var x;
       for(var i= 0; i< jsonsites.asadas.length; i++){
+
+        x= 4-(Math.floor(jsonsites.asadas[i].valor/20));
+        if(x > 4) x=4;
+        if(x < 0) x=0;
+
         puntos.push(new ol.Feature({
+        type: 'click',
         geometry: new ol.geom.Point(ol.proj.fromLonLat([parseFloat(jsonsites.asadas[i].Latitud),parseFloat(jsonsites.asadas[i].Longitud)])),
-      }));
-        puntos[i].setStyle(shapestyles(jsonsites.asadas[i].valor));
+        name: jsonsites.asadas[i].Nombre,
+        id: jsonsites.asadas[i].Asada_ID,
+        riesgo: jsonsites.asadas[i].valor,
+        color: (["Muy Alto", "Alto", "Intermedio", "Bajo", "Nulo"])[x]
+        }));
+
+
+        //puntos[i].setStyle(shapestyles(jsonsites.asadas[i].valor));
       }
 
       
@@ -138,25 +152,62 @@ layers.push(new ol.layer.Tile({
       layers.push(vectorLayer);
 
 
-var select_interaction = new ol.interaction.Select({
+/*var select_interaction = new ol.interaction.Select({
   condition: ol.events.condition.click
 });
 
 select_interaction.on('select', function (e) {
-    var parameters = { "id": e.target.getFeatures().item(0) };
+    var parameters = { "id": e.selected[0].getProperties()};
     $.get('/selected',parameters,function(data) {
      });
-});
+});*/
 
 // carga en mapa
+
+var container = document.getElementById('popup');
+var content = document.getElementById('popup-content');
+var closer = document.getElementById('popup-closer');
+
+
+var overlay = new ol.Overlay({
+        element: container,
+        autoPan: true,
+        autoPanAnimation: {
+          duration: 250
+        }
+});
+
+closer.onclick = function() {
+    overlay.setPosition(undefined);
+    closer.blur();
+    return false;
+};
+
+
 var map = new ol.Map({
             target: 'map',
+            overlays: [overlay],
             layers: layers,
             view: new ol.View({
               center: ol.proj.fromLonLat([-84.097118,9.934691]),
               zoom: 8
             })
           });
-map.addInteraction(select_interaction);
+
+map.on('click', function(evt) {
+    var f = map.forEachFeatureAtPixel(
+        evt.pixel,
+        function(ft, layer){return ft;}
+    );
+    if (f && f.get('type') == 'click') {
+        var geometry = f.getGeometry();
+        var coord = geometry.getCoordinates();
+        content.innerHTML = '<p><b>'+f.get("name")+'</b></p><p><b>ID: </b> '+f.get("id")+' <b>Riesgo: </b>'+f.get("riesgo")+' <b>Nivel de Riesgo: </b>'+f.get("color")+' </p>';        
+        overlay.setPosition(coord);
+        
+    }
+    
+});
+//map.addInteraction(select_interaction);
 
   });
