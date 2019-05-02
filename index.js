@@ -9,17 +9,30 @@ const app = express();
 const PORT = process.env.PORT || 3000
 
 //llamar funciones de controller.js
+
 const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR, getCrudAsadasU, getPresentAsada, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario} = require('./routes/cruds');
 const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo, getAsada, getInfoGeneral, generarInforme} = require('./routes/controller');
 
-
+const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR,getCrudAsadasU, getPresentAsada, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario, getUsuariosAsadas,setUsuariosAsada} = require('./routes/cruds');
+const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo, getAsada, getInfoGeneral, generarInforme, histFormulario, getAnno, getRespuestas, comparaMapas} = require('./routes/controller');
 
 //conexion de BD
+/*
+  host     : process.env.RDS_HOSTNAME,
+  user     : process.env.RDS_USERNAME,
+  password : process.env.RDS_PASSWORD,
+  port     : process.env.RDS_PORT
+    host     : 'aa1p73vf0lmbvdr.cyzdjp7x4zfl.us-east-2.rds.amazonaws.com',
+    user     : 'joseph',
+    password : '12345678',
+    database : 'ebdb',
+    port : '3306'
+*/
 const db = mysql.createConnection ({
     host     : '127.0.0.1',
     user     : 'root',
     password : '1234',
-    database : 'PROYECTO_ASADA'
+    database : 'proyecto_asada'
 });
 
 db.connect((err) => {
@@ -88,6 +101,12 @@ app.get('/crudFormularios', crudFormularios);
 app.get('/infoGeneral', getInfoGeneral);
 app.get('/generarInforme', generarInforme);
 app.post('/sendForm', sendForm);
+app.get('/changeAsadaUser', getUsuariosAsadas);
+app.get('/setUsuariosAsada',setUsuariosAsada);
+app.get('/histFormulario', histFormulario);
+app.get('/getAnno', getAnno);
+app.get('/getRespuestas',getRespuestas);
+app.get('/comparaMapas', comparaMapas)
 
 // llamada al puerto 
 app.listen(PORT, () => {

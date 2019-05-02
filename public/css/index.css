@@ -1,7 +1,7 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
 
-#map {
+#map, #map2 {
     height: 500px;
     width: 100%;
     background-color: #000;
@@ -217,8 +217,12 @@ DISPLAY LI UL NAVBAR
     background-color: #193d66;
 }
 
-.glyphicon-trash{
+.glyphicon-trash, .glyphicon-remove-circle{
     color: rgb(239,51,64);
+}
+
+.glyphicon-ok-circle{
+    color: #193d66;
 }
 
 .hideinput{
@@ -228,4 +232,73 @@ DISPLAY LI UL NAVBAR
 
 .hideinput:focus{
     outline: none;
+}
+
+/*_________POPUP_____________*/
+
+.ol-popup {
+    position: absolute;
+    background-color: white;
+    -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    bottom: 12px;
+    left: -50px;
+}
+.ol-popup:after, .ol-popup:before {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.ol-popup:after {
+    border-top-color: white;
+    border-width: 10px;
+    left: 48px;
+    margin-left: -10px;
+}
+.ol-popup:before {
+    border-top-color: #cccccc;
+    border-width: 11px;
+    left: 48px;
+    margin-left: -11px;
+}
+.ol-popup-content {
+    position: relative;
+    min-width: 200px;
+    min-height: 150px;
+    height: 100%;
+    max-height: 250px;
+    padding:2px;
+    white-space: normal;        
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.ol-popup-content p{
+    font-size: 14px;
+    padding: 2px 4px;
+    color: #222;
+    margin-bottom: 15px;
+}
+.ol-popup-closer {
+    position: absolute;
+    top: -4px;
+    right: 2px;
+    font-size: 100%;
+    color: #0088cc;
+    text-decoration: none;
+}
+a.ol-popup-closer:hover{
+    color: #005580;
+    text-decoration: underline;
+}
+.ol-popup-closer:after {
+    content: "✖";
 }

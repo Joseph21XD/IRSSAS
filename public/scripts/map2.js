@@ -1,6 +1,7 @@
 //variables globales
 var parameters = { 'id': 0 };
 var jsonsites;
+var jsonsites2;
 
 // array de colores
 var colores=['rgba(234, 77, 70, 0.7)','rgba(232, 215, 75, 0.7)','rgba(72, 118, 90, 0.7)','rgba(22, 155, 220, 0.7)','rgba(22, 87, 205, 0.7)'];
@@ -59,8 +60,40 @@ var styleFunction = function(feature) {
                 });
       };
 
+var styleFunction2 = function(feature) {
+        var id =parseInt(feature.get('CODIGO'));
+        var index = jsonsites2.sitios.indexOf(id);
+
+        if(index == -1)
+          return styles[0];
+        else
+          return new ol.style.Style({
+                    fill: new ol.style.Fill({
+                          color: colores[jsonsites2.valores[index]]
+                    }),
+                    stroke: new ol.style.Stroke({
+                          color: colores[jsonsites2.valores[index]]
+
+                    })
+                });
+      };
+
 // Array de capas por defecto, capas OSM y urbano 5000
 var layers = [
+              new ol.layer.Tile({
+                source: new ol.source.OSM()
+              }),
+              new ol.layer.Tile({
+                source: new ol.source.TileWMS({
+                  url: 'http://geos.snitcr.go.cr/be/IGN_5/wms?',
+                  params: {'LAYERS': 'urbano_5000', 'TILED': true},
+                  serverType: 'geoserver',
+                  transition: 0
+                })
+              })
+            ]
+
+layers2 = [
               new ol.layer.Tile({
                 source: new ol.source.OSM()
               }),
@@ -78,6 +111,7 @@ var layers = [
 var parameters= {"tipo": "1"};
 $.get('/getSites',parameters,function(data) {
       jsonsites = data.jsonsites1;
+      jsonsites2 = data.jsonsites2;
      }).done(function(res){
 
  // Carga capa de distritos, llama a función stylefunction
@@ -89,6 +123,14 @@ $.get('/getSites',parameters,function(data) {
                 style: styleFunction
               }))
 
+  layers2.push(    new ol.layer.Vector({
+                source: new ol.source.Vector({
+                  url: 'geojson/District.geojson',
+                  format: new ol.format.GeoJSON()
+                }),
+                style: styleFunction2
+              }))
+/*
 // Carga capas de distritos y provincial para sobreponerlas
 layers.push(new ol.layer.Tile({
                 source: new ol.source.TileWMS({
@@ -116,91 +158,12 @@ layers.push(new ol.layer.Tile({
                   transition: 0
                 })
               }))
-
-//en proceso
-
-
-var style1 = [
-    /*new ol.style.Style({
-        image: new ol.style.Icon(({
-            scale: 0.7,
-            rotateWithView: false,
-            anchor: [0.5, 1],
-            anchorXUnits: 'fraction',
-            anchorYUnits: 'fraction',
-            opacity: 1,
-            src: '/images/gota.png'
-        })),
-        zIndex: 5
-    }),*/
-    new ol.style.Style({
-        image: new ol.style.Circle({
-            radius: 3,
-            fill: new ol.style.Fill({
-                color: 'rgba(98,175,205,0.5)'
-            }),
-            stroke: new ol.style.Stroke({
-                color: 'rgba(98,175,205,1)'
-            })
-        })
-    })
-];
-
-      puntos = [];
-
-      var x;
-      for(var i= 0; i< jsonsites.asadas.length; i++){
-
-        x= 4-(Math.floor(jsonsites.asadas[i].valor/20));
-        if(x > 4) x=4;
-        if(x < 0) x=0;
-
-        puntos.push(new ol.Feature({
-        type: 'click',
-        geometry: new ol.geom.Point(ol.proj.fromLonLat([parseFloat(jsonsites.asadas[i].Latitud),parseFloat(jsonsites.asadas[i].Longitud)])),
-        name: jsonsites.asadas[i].Nombre,
-        id: jsonsites.asadas[i].Asada_ID,
-        riesgo: jsonsites.asadas[i].valor,
-        color: (["Muy Alto", "Alto", "Intermedio", "Bajo", "Nulo"])[x]
-        }));
+*/
 
 
-        puntos[i].setStyle(style1);
-      }
-
-      
-
-      var vectorSource = new ol.source.Vector({
-        features: puntos
-      });
-      var vectorLayer = new ol.layer.Vector({
-        source: vectorSource
-      });
-      layers.push(vectorLayer);
-
-var container = document.getElementById('popup');
-var content = document.getElementById('popup-content');
-var closer = document.getElementById('popup-closer');
-
-
-var overlay = new ol.Overlay({
-        element: container,
-        autoPan: true,
-        autoPanAnimation: {
-          duration: 250
-        }
-});
-
-closer.onclick = function() {
-    overlay.setPosition(undefined);
-    closer.blur();
-    return false;
-};
-
-
+// carga en mapa
 var map = new ol.Map({
             target: 'map',
-            overlays: [overlay],
             layers: layers,
             view: new ol.View({
               center: ol.proj.fromLonLat([-84.097118,9.934691]),
@@ -208,20 +171,13 @@ var map = new ol.Map({
             })
           });
 
-map.on('click', function(evt) {
-    var f = map.forEachFeatureAtPixel(
-        evt.pixel,
-        function(ft, layer){return ft;}
-    );
-    if (f && f.get('type') == 'click') {
-        var geometry = f.getGeometry();
-        var coord = geometry.getCoordinates();
-        content.innerHTML = '<p><b>'+f.get("name")+'</b></p><p><b>ID: </b> '+f.get("id")+' <b>Riesgo: </b>'+f.get("riesgo")+' <b>Nivel de Riesgo: </b>'+f.get("color")+' </p>';        
-        overlay.setPosition(coord);
-        
-    }
-    
-});
-//map.addInteraction(select_interaction);
+var map2 = new ol.Map({
+            target: 'map2',
+            layers: layers2,
+            view: new ol.View({
+              center: ol.proj.fromLonLat([-84.097118,9.934691]),
+              zoom: 8
+            })
+          });
 
   });

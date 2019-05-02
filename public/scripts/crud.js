@@ -373,3 +373,33 @@ function valoresForm(){
 	return true;
 
 }
+
+function seleccionarUsuario(asad, user){
+	if(id!="0")
+	document.getElementById("mark-"+id).className="glyphicon glyphicon-remove-circle";
+    document.getElementById("mark-"+user).className="glyphicon glyphicon-ok-circle";
+	asada=asad;
+    id=user;
+}
+
+function seleccionarAsada(){
+	if(id!="0"){
+	document.getElementById("asadaID-"+id).innerHTML= document.getElementById("selector").value;
+	document.getElementById("asada-"+id).innerHTML= document.getElementById("selector").options[document.getElementById("selector").selectedIndex].text;
+	document.getElementById("savebutton").style.visibility = "visible";
+	}
+}
+
+function saveUserAsada(){
+	var table = document.getElementById("usertable");
+	var lista=[]
+	for (var i = 0; i<table.rows.length; i++) {
+		if((table.rows[i].cells[2].innerHTML+"")!="")
+			lista.push({"Usuario_ID":table.rows[i].cells[0].innerHTML,"Asada_ID":table.rows[i].cells[2].innerHTML});
+	}
+	var parameters = {"UsuarioAsada": lista};
+	$.get('/setUsuariosAsada',parameters,function(data) {
+     }).done(function(res){     	
+		});
+
+}

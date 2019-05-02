@@ -16,10 +16,20 @@
                     <div class="container-fluid">
 
                         <div class="navbar-header">
-                            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
-                                <i class="glyphicon glyphicon-leaf"></i>
-                                <span></span>
-                            </button>
+                            <div class="row-group">
+                                <div class="form-group col-md-5">
+                                    <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                                        <i class="glyphicon glyphicon-leaf"></i>
+                                        <span></span>
+                                    </button>  
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <button type="button" onclick="location.href='/changeAsadaUser';" class="btn btn-info navbar-btn">
+                                        <i class="glyphicon glyphicon-arrow-right"></i>
+                                        <span></span>
+                                    </button>
+                                </div>
+                            </div>
                             <form action="/usuario" onsubmit=" return saveUser();" id="usersub">
                                 <button type="submit" style="visibility: hidden;"  id="savebutton" class="btn btn-info navbar-btn" >Guardar cambios</button>
                                 <p style="color: #f00;" id="error"></p>
@@ -49,10 +59,13 @@
                         <tbody id="usertable">
                                 <%rows.forEach(function(user, index) {%>
                                 <tr>
+
+
                                     <td><%=user.ID%></td>
                                     <td><input type="text" class="form-control hideinput" onchange="updateUser(<%= user.ID%>)" name="name-<%=user.ID%>" value="<%=user.Nombre%>"></td>
                                     <td><input type="text" class="form-control hideinput" disabled onchange="updateUser(<%= user.ID%>)" name="user-<%=user.ID%>" value="<%=user.Usuario%>"></td>
                                     <td><input type="password" class="form-control hideinput" onchange="updateUser(<%= user.ID%>)" name="pass-<%=user.ID%>" value="<%=user.Contrasenna%>"></td>
+                                    <%if (usuario.ID != user.ID) {%>
 									<td><select class="form-control hideinput" onchange="updateUser(<%= user.ID%>)" name="type-<%=user.ID%>">
 										<%if (user.Tipo == 1){%>
 										<option value=1>Superusuario</option>
@@ -62,9 +75,15 @@
 										<option value=1>Superusuario</option>
 										<% } %>
 									</select></td>
-									<%if (usuario.ID != user.ID) {%>
                                     <td><i class="glyphicon glyphicon-trash" onclick="deleteUser(this, <%=user.ID%>);"></i></td>
-									<%}%>
+									<%}else{%>
+                                    <td><select class="form-control hideinput">
+                                        <option value=1>Superusuario</option>
+                                    </select></td>
+                                    <td></td>                                    
+                                    <%}%>
+
+
                                 </tr>
                                 <%});%>
                         </tbody>
