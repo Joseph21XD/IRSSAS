@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000
 
 //llamar funciones de controller.js
 const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR, getCrudAsadasU, getPresentAsada, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario} = require('./routes/cruds');
-const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo, getAsada, getInfoGeneral} = require('./routes/controller');
+const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo, getAsada, getInfoGeneral, generarInforme} = require('./routes/controller');
 
 
 
@@ -86,6 +86,7 @@ app.get('/getRiesgo', getRiesgo);
 app.get('/getAsada', getAsada);
 app.get('/crudFormularios', crudFormularios);
 app.get('/infoGeneral', getInfoGeneral);
+app.get('/generarInforme', generarInforme);
 app.post('/sendForm', sendForm);
 
 // llamada al puerto 
