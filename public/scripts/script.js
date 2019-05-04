@@ -53,7 +53,7 @@ function aranna(value, tipo, anno){
 function graficoAranna(){
 
 	var value= document.getElementById("listAsada").value;
-    aranna(value,"indicadorxasada",0)
+    aranna(value,"INDICADORXASADA",0)
 
 };
 
@@ -95,7 +95,7 @@ function getRespuestas(val,tipo){
     if(val!="0" && val!=""){
     $("#error").html("");
     var asada= document.getElementById("asada").value
-    var tipo = ((tipo == "actual") ? 'indicadorxasada' : 'historicorespuesta');
+    var tipo = ((tipo == "actual") ? 'INDICADORXASADA' : 'HISTORICORESPUESTA');
     aranna(asada,tipo,val);
     document.getElementById("radar-chart-div").style.visibility = "visible";
     $.get('/getRespuestas',{"asada": asada, "anno": val, "tipo": tipo},function(data) {

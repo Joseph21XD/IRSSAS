@@ -40,10 +40,10 @@ module.exports = {
         let k="";
 
         if(req.query.tipo=="2"){
-            s= " SELECT distinct(s.Asada_ID), SUM(s.valor * i.valor) * 100 AS valor FROM historicorespuesta s, indicador i WHERE s.Indicador_ID = i.ID and s.Año='"+req.query.anno+"' GROUP BY (s.Asada_ID) union "+
-            " SELECT distinct(s.Asada_ID), SUM(s.valor * i.valor) * 100 AS valor FROM indicadorxasada s, indicador i WHERE s.Indicador_ID = i.ID and s.Año='"+req.query.anno+"' GROUP BY (s.Asada_ID) ";
-            k= " SELECT distinct(s.Asada_ID), SUM(s.valor * i.valor) * 100 AS valor FROM historicorespuesta s, indicador i WHERE s.Indicador_ID = i.ID and s.Año='"+req.query.anno2+"' GROUP BY (s.Asada_ID) union "+
-            " SELECT distinct(s.Asada_ID), SUM(s.valor * i.valor) * 100 AS valor FROM indicadorxasada s, indicador i WHERE s.Indicador_ID = i.ID and s.Año='"+req.query.anno2+"' GROUP BY (s.Asada_ID) ";
+            s= " SELECT distinct(s.Asada_ID), SUM(s.valor * i.valor) * 100 AS valor FROM HISTORICORESPUESTA s, INDICADOR i WHERE s.Indicador_ID = i.ID and s.Año='"+req.query.anno+"' GROUP BY (s.Asada_ID) union "+
+            " SELECT distinct(s.Asada_ID), SUM(s.valor * i.valor) * 100 AS valor FROM INDICADORXASADA s, INDICADOR i WHERE s.Indicador_ID = i.ID and s.Año='"+req.query.anno+"' GROUP BY (s.Asada_ID) ";
+            k= " SELECT distinct(s.Asada_ID), SUM(s.valor * i.valor) * 100 AS valor FROM HISTORICORESPUESTA s, INDICADOR i WHERE s.Indicador_ID = i.ID and s.Año='"+req.query.anno2+"' GROUP BY (s.Asada_ID) union "+
+            " SELECT distinct(s.Asada_ID), SUM(s.valor * i.valor) * 100 AS valor FROM INDICADORXASADA s, INDICADOR i WHERE s.Indicador_ID = i.ID and s.Año='"+req.query.anno2+"' GROUP BY (s.Asada_ID) ";
         }
 
         let query = "select C.codigo, avg(t.valor) as valor from ASADA A, DISTRITO C, CANTON Ca, PROVINCIA P, "+
@@ -154,14 +154,14 @@ module.exports = {
         var k = "";
         if(tipo == "IRSSAS"){
             s= "select s.Asada_ID, SUM(s.valor*i.valor)*100 as valor from INDICADORXASADA s, INDICADOR i where s.Indicador_ID=i.ID  group by (s.Asada_ID)";
-            k= "select s.Asada_ID, SUM(s.valor*i.valor)*100 as valor, a.Latitud, a.Longitud from indicadorxasada s, indicador i, Asada a where s.Indicador_ID=i.ID and s.Asada_ID=a.ID  group by (s.Asada_ID)";
+            k= "select s.Asada_ID, SUM(s.valor*i.valor)*100 as valor, a.Latitud, a.Longitud from INDICADORXASADA s, INDICADOR i, ASADA a where s.Indicador_ID=i.ID and s.Asada_ID=a.ID  group by (s.Asada_ID)";
         }
         else if(tipo == "SubComponente"){
-            s = "SELECT s.Asada_ID, (SUM(s.valor * i.valor) * 1000000) / (d.valor * c.valor) AS valor FROM INDICADORXASADA s, INDICADOR i, "+
+            s = "SELECT s.Asada_ID, (SUM(s.valor * i.valor) * 1000000) / (d.valor * c.valor) as valor FROM INDICADORXASADA s, INDICADOR i, "+
                 "SUBCOMPONENTE d, COMPONENTE c WHERE s.Indicador_ID = i.ID and i.Subcomponente_ID=d.ID and d.Componente_ID= c.ID "+
                 "and d.id= "+id+" GROUP BY (s.Asada_ID) ";
-            k = "SELECT s.Asada_ID, (SUM(s.valor * i.valor) * 1000000) / (d.valor * c.valor) AS valor, a.Latitud, a.Longitud FROM indicadorxasada s, indicador i, "+
-                "subcomponente d, componente c, Asada a WHERE s.Indicador_ID = i.ID and i.Subcomponente_ID=d.ID and d.Componente_ID= c.ID "+
+            k = "SELECT s.Asada_ID, (SUM(s.valor * i.valor) * 1000000) / (d.valor * c.valor) as valor, a.Latitud, a.Longitud FROM INDICADORXASADA s, INDICADOR i, "+
+                "SUBCOMPONENTE d, COMPONENTE c, ASADA a WHERE s.Indicador_ID = i.ID and i.Subcomponente_ID=d.ID and d.Componente_ID= c.ID "+
                 "and d.id= "+id+" and s.Asada_ID=a.ID GROUP BY (s.Asada_ID) ";
         }
         else{
@@ -173,9 +173,9 @@ module.exports = {
                 "and d.Componente_ID= "+id+" and s.Asada_ID=a.ID GROUP BY (s.Asada_ID)";
         }
 
-        let query = "select C.codigo, avg(t.valor) as valor from ASADA A, distrito C, Canton Ca, provincia P, ("+s+") t"+
-        " where A.DISTRITO_ID=C.codigo and "+
-        " C.CANTON_ID=Ca.ID and C.PROVINCIA_ID=P.ID and A.id=t.asada_id group by(c.codigo)";
+        let query = "select c.codigo, avg(t.valor) as valor from ASADA a, DISTRITO c, CANTON ca, PROVINCIA p, ("+s+") t"+
+        " where a.DISTRITO_ID=c.codigo and "+
+        " c.CANTON_ID=ca.ID and c.PROVINCIA_ID=p.ID and a.id=t.asada_id group by(c.codigo)";
 
 
         db.query(query, function(err, rows, fields) {
@@ -225,11 +225,11 @@ module.exports = {
     },
 
     getRiesgo: (req,res) =>{
-        console.log("ENTRA")
+        console.log(req.query)
         let s = "";
         if(req.query.tipo=="HISTORICORESPUESTA")
-            s="and s.año='"+req.query.anno+"'";
-        let query= "SELECT a.Nombre as asada, c.Nombre, (SUM(s.valor * i.valor) * 10000) / c.valor  AS valor FROM "+req.query.tipo+" s, INDICADOR i, "+
+            s=" and s.año= '"+req.query.anno+"' ";
+        let query= "SELECT a.Nombre as asada, c.Nombre, (SUM(s.valor * i.valor) * 10000) / c.valor  as valor FROM "+req.query.tipo+" s, INDICADOR i, "+
         "SUBCOMPONENTE d, COMPONENTE c, ASADA a WHERE s.Indicador_ID = i.ID  and i.Subcomponente_ID=d.ID and d.Componente_ID= c.ID "+
         "and s.Asada_ID="+req.query.id+" "+s+" and s.Asada_ID=a.ID GROUP BY a.Nombre, c.Nombre;";
         db.query(query, function(err,rows,fields){
@@ -289,7 +289,7 @@ module.exports = {
     getRespuestas: (req,res) =>{
         console.log(req.query);
         if(req.session.value=1){
-            let query = "select h.texto as respuesta, i.Nombre as pregunta from "+req.query.tipo+" h inner join indicador i on h.Indicador_ID=i.ID where h.Año like '"+req.query.anno+"' and h.Asada_ID="+req.query.asada+" ;"
+            let query = "select h.texto as respuesta, i.Nombre as pregunta from "+req.query.tipo+" h inner join INDICADOR i on h.Indicador_ID=i.ID where h.Año like '"+req.query.anno+"' and h.Asada_ID="+req.query.asada+" ;"
             db.query(query, function(err,rows,fields){
                 if(!err){
                     res.send({"preguntas": rows});
@@ -300,7 +300,7 @@ module.exports = {
 
     comparaMapas: (req,res) =>{
         if(req.session.value==1){
-            let query = "SELECT distinct(i.Año) as anno from indicadorxasada i union select distinct(h.Año) as anno from historicorespuesta h";
+            let query = "SELECT distinct(i.Año) as anno from INDICADORXASADA i union select distinct(h.Año) as anno from HISTORICORESPUESTA h";
             db.query(query,function(err,rows,fields){
                 if(!err)
                     res.render('pages/comparaMapas.ejs',{"usuario": req.session.usuario, "annos": rows});
@@ -313,7 +313,7 @@ module.exports = {
 		if(req.session.value==1){
 
 		let query = 'select a.ID, a.Nombre, p.Nombre as Provincia, a.Distrito_id, c.Nombre as Canton, d.Nombre as Distrito, ai.Ubicacion, ai.Telefono, ai.Poblacion, ai.Url, ai.cantAbonados ' +
-		'from asada a left join asadainfo ai on a.ID=ai.Asada_ID inner join distrito d on a.distrito_id=d.Codigo inner join canton c on d.Canton_ID=c.ID inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID and a.ID='+ req.params.id +' ;';
+		'from ASADA a left join ASADAINFO ai on a.ID=ai.Asada_ID inner join DISTRITO d on a.distrito_id=d.Codigo inner join CANTON c on d.Canton_ID=c.ID inner join PROVINCIA p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID and a.ID='+ req.params.id +' ;';
 
 		db.query(query, function(err, rows, fields) {
 		if (!err){
