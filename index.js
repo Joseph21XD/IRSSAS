@@ -11,10 +11,7 @@ const PORT = process.env.PORT || 3000
 //llamar funciones de controller.js
 
 const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR,getCrudAsadasU, getPresentAsada, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario, getUsuariosAsadas,setUsuariosAsada} = require('./routes/cruds');
-const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo,  histFormulario, getAnno, getRespuestas,comparaMapas, getAsada, getInfoGeneral} = require('./routes/controller');
-
-
-
+const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo, getAsada, getInfoGeneral, generarInforme, histFormulario, getAnno, getRespuestas, comparaMapas} = require('./routes/controller');
 
 //conexion de BD
 /*
@@ -99,6 +96,7 @@ app.get('/getRiesgo', getRiesgo);
 app.get('/getAsada', getAsada);
 app.get('/crudFormularios', crudFormularios);
 app.get('/infoGeneral', getInfoGeneral);
+app.get('/generarInforme', generarInforme);
 app.post('/sendForm', sendForm);
 app.get('/changeAsadaUser', getUsuariosAsadas);
 app.get('/setUsuariosAsada',setUsuariosAsada);

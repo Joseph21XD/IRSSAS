@@ -11,12 +11,12 @@ module.exports = {
 
     grafico: (req, res) => {
     	if(req.session.value==1){
-        let query = "select a.ID, a.Nombre from ASADA a";
-        if(req.session.usuario.Tipo=="2")
-            query+=" where a.ID="+req.session.usuario.Asada_ID+" ;";
-        db.query(query, function(err,rows,fields){
-        	res.render('pages/grafArana.ejs',{"usuario": req.session.usuario, "asadas":rows });
-        });
+			let query = "select a.ID, a.Nombre from ASADA a";
+			if(req.session.usuario.Tipo=="2")
+				query+=" where a.ID="+req.session.usuario.Asada_ID+" ;";
+			db.query(query, function(err,rows,fields){
+				res.render('pages/grafArana.ejs',{"usuario": req.session.usuario, "asadas":rows });
+			});
         }
         else
         	res.redirect('/');
@@ -25,6 +25,24 @@ module.exports = {
     getInfoGeneral: (req, res) => {
         res.render('pages/infoGeneral.ejs',{"usuario": req.session.usuario});
     },
+	
+	generarInforme: (req, res) => {
+		if(req.session.value==1){
+			let query = "select a.*,p.Nombre as Provincia,c.Nombre as Canton,d.Nombre as Distrito,  ai.Ubicacion,ai.Telefono,ai.Poblacion,ai.Url,ai.cantAbonados from asada a left join asadainfo ai on a.ID=ai.Asada_ID inner join distrito d on a.distrito_id=d.Codigo inner join canton c on d.Canton_ID=c.ID inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID;";
+			db.query(query, function(err,rows,fields){
+				if(!err){
+					res.render('pages/generarInforme.ejs',{"usuario": req.session.usuario, "asadas":rows });
+				}
+				else{
+					console.log('Error while performing Query.');
+					res.redirect('/');
+				}
+			});
+		}
+		else
+			res.redirect('/');
+	},
+	
 
 
         
