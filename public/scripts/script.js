@@ -26,6 +26,7 @@ function aranna(value, tipo, anno){
 			type: 'radar',
 			data: {
 			labels: data.componentes,
+
 			datasets: [
 				{
 				label: data.nombre,
@@ -36,9 +37,9 @@ function aranna(value, tipo, anno){
 				pointBackgroundColor: "rgba(179,181,198,1)",
 				data: data.valores
 				}]
-			});
-		});
-	}
+
+			}});
+	});
 };
 
 function graficoAranna(){
