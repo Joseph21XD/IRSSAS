@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000
 //llamar funciones de controller.js
 
 const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR,getCrudAsadasU, getPresentAsada, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario, getUsuariosAsadas,setUsuariosAsada} = require('./routes/cruds');
-const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo, getAsada, getInfoGeneral, generarInforme, histFormulario, getAnno, getRespuestas, comparaMapas} = require('./routes/controller');
+const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo, getAsada, getInfoGeneral, generarInforme, histFormulario, getAnno, getRespuestas, comparaMapas, statsComponentes,statsSubcomponentes} = require('./routes/controller');
 
 //conexion de BD
 /*
@@ -103,7 +103,9 @@ app.get('/setUsuariosAsada',setUsuariosAsada);
 app.get('/histFormulario', histFormulario);
 app.get('/getAnno', getAnno);
 app.get('/getRespuestas',getRespuestas);
-app.get('/comparaMapas', comparaMapas)
+app.get('/comparaMapas', comparaMapas);
+app.get('/statsComponentes',statsComponentes);
+app.get('/statsSubcomponentes/:id',statsSubcomponentes);
 
 // llamada al puerto 
 app.listen(PORT, () => {

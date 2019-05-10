@@ -403,3 +403,36 @@ function saveUserAsada(){
 		});
 
 }
+
+function hacerFiltroN(){
+	print("holi");
+    document.getElementById("listaDistritos").style.display = 'none';
+    document.getElementById("listaCantones").style.display = 'none';
+    document.getElementById("listaProvincias").style.display = 'none';
+    document.getElementById("listaNacionales").style.display = 'inline';
+}
+
+function hacerFiltroP(){
+	print("holi");
+    document.getElementById("listaDistritos").style.display = 'none';
+    document.getElementById("listaCantones").style.display = 'none';
+    document.getElementById("listaNacionales").style.display = 'none';
+    document.getElementById("listaProvincias").style.display = 'inline';
+}
+
+function hacerFiltroC(){
+	print("holi");
+    document.getElementById("listaDistritos").style.display = 'none';
+    document.getElementById("listaProvincias").style.display = 'none';
+    document.getElementById("listaNacionales").style.display = 'none';
+    document.getElementById("listaCantones").style.display = 'inline';
+}
+
+function hacerFiltroD(){
+	print("holi");
+    document.getElementById("listaCantones").style.display = 'none';
+    document.getElementById("listaProvincias").style.display = 'none';
+    document.getElementById("listaNacionales").style.display = 'none';
+    document.getElementById("listaDistritos").style.display = 'inline';
+
+}

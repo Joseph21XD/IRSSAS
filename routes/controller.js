@@ -348,7 +348,104 @@ module.exports = {
         else
             res.redirect('/');
 
-	}
+	},
+
+    statsComponentes:(req,res)=>{
+        if(req.session.value == 1){
+            
+            //distrital
+            let query = "SELECT C2.Asada_ID, C2.Nombre, C1.Distrito, C2.valor FROM (SELECT s.Asada_ID, a.Nombre, " +
+            "SUM(s.valor * i.valor) AS valor, a.Distrito_id FROM indicadorxasada s, indicador i, Asada a, " + 
+            "asadainfo ai WHERE s.Indicador_ID = i.ID and s.Asada_ID=a.ID GROUP BY (s.Asada_ID)) AS C2 INNER JOIN " + 
+            "(select concat(p.Nombre, ' - ', c.Nombre, ' - ' , d.Nombre) as Distrito, d.Codigo from distrito d inner join " + 
+            "canton c on d.Canton_ID=c.ID  inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID) AS C1 " +
+            "ON C2.Distrito_id = C1.Codigo ; ";
+
+            let filtroD = "select concat(p.Nombre, ' - ', c.Nombre, ' - ', d.Nombre) as Ubicacion,p.ID as IDProvincia,c.ID as IDCanton, d.Codigo from distrito d inner join canton c on d.Canton_ID=c.ID  inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID; ";
+            let filtroC = "select concat(p.Nombre, ' - ', c.Nombre) as Ubicacion,p.ID as IDProvincia,c.ID as IDCanton from distrito d inner join canton c on d.Canton_ID=c.ID  inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID group by 1; ";
+            let filtroP = "Select p.Nombre as Ubicacion, p.ID from provincia p; ";
+
+            // execute query
+            db.query(query, function(err, rows, fields) {
+            if (!err){
+
+
+                db.query(filtroD, function(err2, rows2, fields2) {
+                //console.log(rows2);
+                if (!err2){
+
+
+                    db.query(filtroC, function(err3, rows3, fields3) {
+                    if (!err3){
+
+
+                        db.query(filtroP, function(err4, rows4, fields4) {
+                        if (!err4){
+                            //console.log("entra aca bryan")
+                            //console.log(rows2);
+                            //console.log(rows3);
+                            //console.log(rows4);
+                            //console.log("sale aca bryan")
+                            res.render('pages/statsComponentes.ejs', {"asadas":rows, "filtroD":rows2,"filtroC":rows3,"filtroP":rows4,"usuario": req.session.usuario})
+                        }
+                        else{
+                            console.log('Error while performing Query.');
+                            res.redirect('/');
+                            }
+                        });
+
+                    }
+                    else{
+                        console.log('Error while performing Query.');
+                        res.redirect('/');
+                        }
+                    });
+
+                }
+                else{
+                    console.log('Error while performing Query.');
+                    res.redirect('/');
+                    }
+                });
+
+            }
+            else{
+                console.log('Error while performing Query.');
+                res.redirect('/');
+                }
+            });
+        }
+        else{
+                res.redirect('/');
+        }
+
+
+    },
+    statsSubcomponentes:(req,res)=>{
+        console.log(req.params.id);
+        if(req.session.value == 1){
+            
+            let query = "SELECT s.Asada_ID, a.Nombre, c.Nombre as NombreComponente, d.Nombre as NombreSubComponente" + 
+            ", (SUM(s.valor * i.valor) * 1000000) / (d.valor * c.valor) AS valor FROM indicadorxasada s, indicador i" + 
+            ", subcomponente d, componente c, asada a WHERE s.Indicador_ID = i.ID and i.Subcomponente_ID=d.ID and d." + 
+            "Componente_ID= c.ID and a.ID = s.Asada_ID and s.Asada_ID = " +  req.params.id + " GROUP BY c.Nombre, d." + 
+            "Nombre, s.Asada_ID ; ";
+
+            // execute query
+            db.query(query, function(err, rows, fields) {
+            if (!err){
+                res.render('pages/statsSubcomponentes.ejs', {"rows":rows, "usuario": req.session.usuario})}
+            else{
+                console.log('Error while performing Query.');
+                res.redirect('/');
+                }
+
+            });
+        }
+        else{
+                res.redirect('/');
+        }
+    }
 
 
 
