@@ -28,7 +28,7 @@ module.exports = {
 	
 	generarInforme: (req, res) => {
 		if(req.session.value==1){
-			let query = "select a.*,p.Nombre as Provincia,c.Nombre as Canton,d.Nombre as Distrito,  ai.Ubicacion,ai.Telefono,ai.Poblacion,ai.Url,ai.cantAbonados from asada a left join asadainfo ai on a.ID=ai.Asada_ID inner join distrito d on a.distrito_id=d.Codigo inner join canton c on d.Canton_ID=c.ID inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID;";
+			let query = "select a.*,p.Nombre as Provincia,c.Nombre as Canton,d.Nombre as Distrito,  ai.Ubicacion,ai.Telefono,ai.Poblacion,ai.Url,ai.cantAbonados from ASADA a left join ASADAINFO ai on a.ID=ai.Asada_ID inner join DISTRITO d on a.distrito_id=d.Codigo inner join CANTON c on d.Canton_ID=c.ID inner join PROVINCIA p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID;";
 			db.query(query, function(err,rows,fields){
 				if(!err){
 					res.render('pages/generarInforme.ejs',{"usuario": req.session.usuario, "asadas":rows });
@@ -348,72 +348,18 @@ module.exports = {
         else
             res.redirect('/');
 
-	},
-
+    },
+    
     statsComponentes:(req,res)=>{
         if(req.session.value == 1){
-            
-            //distrital
-            let query = "SELECT C2.Asada_ID, C2.Nombre, C1.Distrito, C2.valor FROM (SELECT s.Asada_ID, a.Nombre, " +
-            "SUM(s.valor * i.valor) AS valor, a.Distrito_id FROM indicadorxasada s, indicador i, Asada a, " + 
-            "asadainfo ai WHERE s.Indicador_ID = i.ID and s.Asada_ID=a.ID GROUP BY (s.Asada_ID)) AS C2 INNER JOIN " + 
-            "(select concat(p.Nombre, ' - ', c.Nombre, ' - ' , d.Nombre) as Distrito, d.Codigo from distrito d inner join " + 
-            "canton c on d.Canton_ID=c.ID  inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID) AS C1 " +
-            "ON C2.Distrito_id = C1.Codigo ; ";
 
-            let filtroD = "select concat(p.Nombre, ' - ', c.Nombre, ' - ', d.Nombre) as Ubicacion,p.ID as IDProvincia,c.ID as IDCanton, d.Codigo from distrito d inner join canton c on d.Canton_ID=c.ID  inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID; ";
-            let filtroC = "select concat(p.Nombre, ' - ', c.Nombre) as Ubicacion,p.ID as IDProvincia,c.ID as IDCanton from distrito d inner join canton c on d.Canton_ID=c.ID  inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID group by 1; ";
-            let filtroP = "Select p.Nombre as Ubicacion, p.ID from provincia p; ";
-
-            // execute query
-            db.query(query, function(err, rows, fields) {
-            if (!err){
-
-
-                db.query(filtroD, function(err2, rows2, fields2) {
-                //console.log(rows2);
-                if (!err2){
-
-
-                    db.query(filtroC, function(err3, rows3, fields3) {
-                    if (!err3){
-
-
-                        db.query(filtroP, function(err4, rows4, fields4) {
-                        if (!err4){
-                            //console.log("entra aca bryan")
-                            //console.log(rows2);
-                            //console.log(rows3);
-                            //console.log(rows4);
-                            //console.log("sale aca bryan")
-                            res.render('pages/statsComponentes.ejs', {"asadas":rows, "filtroD":rows2,"filtroC":rows3,"filtroP":rows4,"usuario": req.session.usuario})
-                        }
-                        else{
-                            console.log('Error while performing Query.');
-                            res.redirect('/');
-                            }
-                        });
-
-                    }
-                    else{
-                        console.log('Error while performing Query.');
-                        res.redirect('/');
-                        }
-                    });
-
-                }
-                else{
-                    console.log('Error while performing Query.');
-                    res.redirect('/');
-                    }
-                });
-
-            }
-            else{
-                console.log('Error while performing Query.');
-                res.redirect('/');
+            let query= "SELECT p.* from PROVINCIA p;"
+            db.query(query,function(err,rows,fields){
+                if(!err){
+                    res.render('pages/statsComponentes2.ejs', {"rows":rows, "usuario": req.session.usuario})
                 }
             });
+
         }
         else{
                 res.redirect('/');
@@ -421,13 +367,89 @@ module.exports = {
 
 
     },
+    getCantones:(req,res)=>{
+        console.log("JajaSaludos");
+        console.log(req.query.provincia);
+        if(req.session.value == 1){
+
+            let query= "SELECT c.* from CANTON c where c.Provincia_ID="+req.query.provincia+" ;";
+            db.query(query,function(err,rows,fields){
+                if(!err){
+                    console.log(rows);
+                    res.send({"rows":rows})
+                }
+            });
+
+        }
+        else{
+                res.redirect('/');
+        }
+
+
+    },
+
+    getDistritos:(req,res)=>{
+        console.log("JajaSaludos");
+        console.log(req.query.provincia);
+        console.log(req.query.canton);
+        if(req.session.value == 1){
+
+            let query= "SELECT c.* from DISTRITO c where c.Provincia_ID="+req.query.provincia+" and c.Canton_ID="+req.query.canton+" ;";
+            db.query(query,function(err,rows,fields){
+                if(!err){
+                    res.send({"rows":rows})
+                }
+            });
+
+        }
+        else{
+                res.redirect('/');
+        }
+
+
+    },
+
+    getEstadisticas:(req,res)=>{
+        console.log(req.query);
+        if(req.session.value == 1){
+            var s="";
+            if(req.query.provincia!=0){
+                s+=" where k.Provincia_ID="+req.query.provincia+" ";
+                if(req.query.canton!=0){
+                    s+=" and k.Canton_ID="+req.query.canton+" ";
+                    if(req.query.distrito!=0){
+                        s+=" and k.Distrito_ID="+req.query.distrito+" ";
+                    }
+                }
+            }
+            let query = "SELECT * FROM (SELECT c2.Asada_ID, c2.Nombre, c1.* , c2.valor FROM (SELECT  s.Asada_ID, a.Nombre, "+ 
+            "SUM(s.valor * i.valor) * 100 AS valor, a.Distrito_id FROM INDICADORXASADA s, INDICADOR i, ASADA a WHERE s.Indicador_ID = i.ID and a.ID=s.Asada_ID "+
+            "GROUP BY (s.Asada_ID)) AS c2 INNER JOIN (select p.ID as Provincia_ID, p.Nombre as Provincia , c.ID as Canton_ID, c.Nombre as Canton, d.ID as Distrito_ID, d.Nombre as Distrito, d.Codigo from DISTRITO d inner join "+
+            "CANTON c on d.Canton_ID=c.ID  inner join PROVINCIA p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID) AS c1 ON c2.Distrito_id = c1.Codigo) k "+s+" order by 10 "+req.query.orden+"; ";
+            console.log(query);
+            db.query(query,function(err,rows,fields){
+                if(!err){
+                    console.log(rows);
+                    res.send({"rows":rows})
+                }
+            });
+
+        }
+        else{
+                res.redirect('/');
+        }
+
+    },
+
+
+
     statsSubcomponentes:(req,res)=>{
         console.log(req.params.id);
         if(req.session.value == 1){
             
             let query = "SELECT s.Asada_ID, a.Nombre, c.Nombre as NombreComponente, d.Nombre as NombreSubComponente" + 
-            ", (SUM(s.valor * i.valor) * 1000000) / (d.valor * c.valor) AS valor FROM indicadorxasada s, indicador i" + 
-            ", subcomponente d, componente c, asada a WHERE s.Indicador_ID = i.ID and i.Subcomponente_ID=d.ID and d." + 
+            ", (SUM(s.valor * i.valor) * 1000000) / (d.valor * c.valor) AS valor FROM INDICADORXASADA s, INDICADOR i" + 
+            ", SUBCOMPONENTE d, COMPONENTE c, ASADA a WHERE s.Indicador_ID = i.ID and i.Subcomponente_ID=d.ID and d." + 
             "Componente_ID= c.ID and a.ID = s.Asada_ID and s.Asada_ID = " +  req.params.id + " GROUP BY c.Nombre, d." + 
             "Nombre, s.Asada_ID ; ";
 

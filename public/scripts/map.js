@@ -121,9 +121,9 @@ layers.push(new ol.layer.Tile({
 
 
 var style1 = [
-    /*new ol.style.Style({
+    new ol.style.Style({
         image: new ol.style.Icon(({
-            scale: 0.7,
+            scale: 0.3,
             rotateWithView: false,
             anchor: [0.5, 1],
             anchorXUnits: 'fraction',
@@ -132,15 +132,15 @@ var style1 = [
             src: '/images/gota.png'
         })),
         zIndex: 5
-    }),*/
+    }),
     new ol.style.Style({
         image: new ol.style.Circle({
-            radius: 3,
+            radius: 4,
             fill: new ol.style.Fill({
-                color: 'rgba(98,175,205,0.5)'
+                color: 'rgba(255,255,255,0.5)'
             }),
             stroke: new ol.style.Stroke({
-                color: 'rgba(98,175,205,1)'
+                color: 'rgba(0,0,0,1)'
             })
         })
     })

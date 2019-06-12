@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000
 //llamar funciones de controller.js
 
 const {getCrudComponente, saveComponente, getCrudSubcomponente, saveSubComponente, getCrudIndicador, getIndicador, deleteIndicador, updateIndicador, newIndicador, createIndicador, getCrudAsadasR,getCrudAsadasU, getPresentAsada, saveAsada, newAsada, createAsada, deleteAsada, crudFormularios, sendForm, getCrudUsuario, saveUsuario, getUsuariosAsadas,setUsuariosAsada} = require('./routes/cruds');
-const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo, getAsada, getInfoGeneral, generarInforme, histFormulario, getAnno, getRespuestas, comparaMapas, statsComponentes,statsSubcomponentes} = require('./routes/controller');
+const {getHomePage, login, getMain, getVisor, getComponente, logout, getSites, selected, grafico, getRiesgo, getAsada, getInfoGeneral, generarInforme, histFormulario, getAnno, getRespuestas, comparaMapas, statsComponentes,statsSubcomponentes, getCantones, getDistritos, getEstadisticas} = require('./routes/controller');
 
 //conexion de BD
 /*
@@ -29,7 +29,8 @@ const db = mysql.createConnection ({
     host     : 'localhost',
     user     : 'userasada',
     password : 'asada',
-    database : 'proyecto_asada'
+    database : 'proyecto_asada',
+    port : '3306'
 });
 
 db.connect((err) => {
@@ -64,7 +65,6 @@ app.use(require('express-session')({
 // rutas con sus respectivas funciones
 app.get('/', getHomePage);
 app.post('/', [login, getMain]);
-
 app.get('/visor', getVisor);
 app.get('/main', getMain);
 app.get('/logout', logout);
@@ -106,7 +106,9 @@ app.get('/getRespuestas',getRespuestas);
 app.get('/comparaMapas', comparaMapas);
 app.get('/statsComponentes',statsComponentes);
 app.get('/statsSubcomponentes/:id',statsSubcomponentes);
-
+app.get('/getCantones', getCantones);
+app.get('/getDistritos', getDistritos);
+app.get('/getEstadisticas',getEstadisticas);
 // llamada al puerto 
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);

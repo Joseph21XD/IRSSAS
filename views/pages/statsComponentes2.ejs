@@ -32,6 +32,37 @@
                     </div>
                     
                     <div style="margin: 20px;">
+                            <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label> Provincia </label>
+                                        <select class="form-control" onchange="getCanton()" id="prov">
+                                                <option value="0">Sin filtro</option>
+                                            <%rows.forEach(function(row, index) {%>
+                                                <option value="<%= row.ID%>"><%= row.Nombre%></option>
+                                            <%});%>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label> Canton </label>
+                                        <select class="form-control" onchange="getDistrito()" id="cant">
+                                            <option value="0">Sin filtro</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label> Distrito </label>
+                                        <select class="form-control" id="dist">
+                                                <option value="0">Sin filtro</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label> Orden </label>
+                                        <select class="form-control" id="ord">
+                                            <option value="ASC">Ascendente</option>
+                                            <option value="DESC">Descendente</option>
+                                        </select>
+                                    </div>
+                                </div>
+                        <button onclick="getEstadisticas()">Filtrar</button>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -45,21 +76,9 @@
                                 </tr>
                             </thead>
                         <tbody id="componenttable">
-                                <%asadas.forEach(function(consulta, index) {%>
-                                <tr>
-                                    <td><%=consulta.Asada_ID%></td>
-                                    <td><%=consulta.Nombre%></td>
-                                    <td><%=consulta.Distrito%></td>
-                                    <td><%=consulta.Canton%></td>
-                                    <td><%=consulta.Provincia%></td>
-                                    <td><%=consulta.valor%></td>
-                                    <td><i class="glyphicon glyphicon-leaf" style="color: #325276" onclick="location.href='/statsSubcomponentes/<%=consulta.Asada_ID%>';"></i></td>
-                                    
-                                </tr>
-                                <%});%>
                         </tbody>
                         </table>
-    
+                    </div>
 
 
                 </nav>
@@ -97,6 +116,6 @@
             
 
         </script>
-        <script src="scripts/crud.js"></script>
+        <script src="scripts/script.js"></script>
     </body>
 </html>

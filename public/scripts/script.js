@@ -51,15 +51,15 @@ function graficoAranna(){
 function presentarAsada(){
     
     var asada = document.getElementById("listAsada").value;
-    var values_list = asada.split(",");
+    var values_list = asada.split(";");
     //console.log(values_list);
     
     $("div.present").html(
-        "<br><h4>" + values_list[0] + "</h4><br>" + 
-        "<h4>UBICACIÓN: " + values_list[1] + ", " + values_list[2] + ", " + values_list[3] + "</h4><br>" + 
-        "<h4>SEÑAS ADICIONALES: " + values_list[4] + "</h4><br>" + 
-        "<h4>TELÉFONO: " + values_list[5] + "</h4><br>" +
-        "<h4>URL: " + values_list[6] + "</h4><br>" 
+        "<br><p><b>" + values_list[0] + "</b></p><br>" + 
+        "<p><b>UBICACIÓN:</b> " + values_list[1] + ", " + values_list[2] + ", " + values_list[3] + "</p><br>" + 
+        "<p><b>SEÑAS ADICIONALES:</b> " + values_list[4] + "</p><br>" + 
+        "<p><b>TELÉFONO:</b> " + values_list[5] + "</p><br>" +
+        "<p><b>URL:</b> " + values_list[6] + "</p><br>" 
     );
 };
 
@@ -340,3 +340,53 @@ function comparar(){
         layers2[2].setStyle(styleFunction2);
     });
 };
+
+function getCanton(){
+	var parameters = { "provincia": document.getElementById("prov").value};
+	var cantones;
+	$.get('/getCantones',parameters,function(data) {
+		cantones = data;
+	   }).done(function(res){       
+		  var selectCant = document.getElementById("cant");
+		  selectCant.innerHTML="<option value='0'>Sin filtro</option>";
+		  cantones.rows.forEach(row => {
+			  selectCant.innerHTML+="<option value='"+row.ID+"'>"+row.Nombre+"</option>";
+		  });
+		  document.getElementById("dist").innerHTML="<option value='0'>Sin filtro</option>";
+	  });
+
+}
+
+
+function getDistrito(){
+	var parameters = { "provincia": document.getElementById("prov").value, "canton": document.getElementById("cant").value};
+	var distritos;
+	$.get('/getDistritos',parameters,function(data) {
+		distritos = data;
+	   }).done(function(res){       
+		  var selectCant = document.getElementById("dist");
+		  selectCant.innerHTML="<option value='0'>Sin filtro</option>";
+		  distritos.rows.forEach(row => {
+			  selectCant.innerHTML+="<option value='"+row.ID+"'>"+row.Nombre+"</option>";
+		  });
+	  });
+
+}
+
+function getEstadisticas(){
+	var parameters = { "provincia": document.getElementById("prov").value, "canton": document.getElementById("cant").value, "distrito": document.getElementById("dist").value, "orden": document.getElementById("ord").value};
+	var distritos;
+	$.get('/getEstadisticas',parameters,function(data) {
+		distritos = data;
+	   }).done(function(res){       
+		  var selectCant = document.getElementById("componenttable");
+		  selectCant.innerHTML="";
+		  distritos.rows.forEach(consulta => {
+			  selectCant.innerHTML+="<tr><td>"+consulta.Asada_ID+"</td><td>"+consulta.Nombre+"</td><td>"+
+			  ""+consulta.Distrito+"</td><td>"+consulta.Canton+"</td><td>"+consulta.Provincia+"</td><td>"+
+			  ""+consulta.valor+"</td><td><i class='glyphicon glyphicon-leaf' style='color: #325276' "+
+			  "onclick='location.href='/statsSubcomponentes/"+consulta.Asada_ID+"';'></i></td></tr>";
+		  });
+	  });
+
+}

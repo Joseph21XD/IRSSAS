@@ -25,9 +25,9 @@ module.exports = {
         if(req.session.value==1){
 
         let query = 'select a.ID,a.Latitud,a.Longitud,a.Nombre,p.Nombre as Provincia, a.Distrito_id,c.Nombre as Canton,d.Nombre as Distrito,ai.Ubicacion,ai.Telefono,ai.Poblacion,ai.Url,ai.cantAbonados ' +
-                    'from ASADA a left join ASADAINFO ai on a.ID=ai.Asada_ID inner join DISTRITO d on a.distrito_id=d.Codigo inner join CANTON c on d.Canton_ID=c.ID inner join PROVINCIA p on '+
-                    'p.ID=c.Provincia_ID where d.Provincia_ID=p.ID and a.ID='+ req.params.id +' ;';
-        let query2 = 'select concat(p.Nombre, " - ", c.Nombre, " - ", d.Nombre) as Distrito, d.Codigo from distrito d inner join canton c on d.Canton_ID=c.ID inner join provincia p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID;';
+                    ' from ASADA a left join ASADAINFO ai on a.ID=ai.Asada_ID inner join DISTRITO d on a.distrito_id=d.Codigo inner join CANTON c on d.Canton_ID=c.ID inner join PROVINCIA p on '+
+                    ' p.ID=c.Provincia_ID where d.Provincia_ID=p.ID and a.ID='+ req.params.id +' ;';
+        let query2 = ' select concat(p.Nombre, " - ", c.Nombre, " - ", d.Nombre) as Distrito, d.Codigo from DISTRITO d inner join CANTON c on d.Canton_ID=c.ID inner join PROVINCIA p on p.ID=c.Provincia_ID where d.Provincia_ID=p.ID;';
         // execute query
         db.query(query, function(err, rows, fields) {
         if (!err){
@@ -241,9 +241,9 @@ module.exports = {
 
         let query = "select c.*,s.Nombre as Subcomponente, m.Nombre as Medida , i.Codigo, i.Nombre, i.Subcomponente_ID,"+
          " i.Valor*100 as Valor , i.ID from INDICADOR i inner join SUBCOMPONENTE s on i.Subcomponente_ID=s.ID inner join "+
-         " MEDIDA m on i.Medida_ID=m.ID left join IndicadorInfo c on c.Indicador_ID=i.ID where i.id= "+req.params.id+" ;";
+         " MEDIDA m on i.Medida_ID=m.ID left join INDICADORINFO c on c.Indicador_ID=i.ID where i.id= "+req.params.id+" ;";
         // execute query
-        let query2 = "select * from subcomponente;"
+        let query2 = "select s.* from SUBCOMPONENTE s;"
 
         db.query(query, function(err, rows, fields) {
         if (!err){
