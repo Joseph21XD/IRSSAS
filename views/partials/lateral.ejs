@@ -1,4 +1,5 @@
             <nav id="sidebar">
+                <div id="menucomps">
                 <div class="sidebar-header">
                     <h2 id="irss">Proyecto IRSSAS</h2>
                 </div>
@@ -25,8 +26,35 @@
                     <hr>
                     <li class="active"><a href="/presentacionAsadas">Presentación de ASADAS</a></li>
                     <li class="active"> <a  href="/infoGeneral">Información General</a></li>
+                    <li class="active"> <a id="filts">Filtros</a></li>
                     
                 </ul>
+                </div>
+                <div id="menufilts">
+                        <ul class="list-unstyled components mainmenu">
+                                <li class="active"><a>Provincia  <select class="form-control" onchange="getCanton()" id="prov">
+                                        <option value="0">Sin filtro</option>
+                                    <%rows.forEach(function(row, index) {%>
+                                        <option value="<%= row.ID%>"><%= row.Nombre%></option>
+                                    <%});%>
+                                </select></a></li>
+                                <li class="active"><a>Cantón<select class="form-control" onchange="getDistrito()" id="cant">
+                                        <option value="0">Sin filtro</option>
+                                    </select></a></li>
+                                <li class="active"><a>Distrito<select class="form-control" id="dist">
+                                        <option value="0">Sin filtro</option>
+                                </select></a></li>
+                                <li class="active"><a onclick="filtrarMap();">Filtrar</a></li>
+                                <hr>                                
+                                <li class="active"><a id="filt-5" onclick="checkear(this.id);"><i id="filts-5" class="glyphicon glyphicon-ok"></i>  Provincia</a></li>
+                                <li class="active"><a id="filt-4" onclick="checkear(this.id);"><i id="filts-4" class="glyphicon glyphicon-ok"></i>  Cantón</a></li>
+                                <li class="active"><a id="filt-3" onclick="checkear(this.id);"><i id="filts-3" class="glyphicon glyphicon-ok"></i>  Distrito</a></li>
+                                <li class="active"><a id="filt-2" onclick="checkear(this.id);"><i id="filts-2" class="glyphicon glyphicon-ok"></i>  Riesgo</a></li>
+                                <li class="active"><a id="filt-6" onclick="checkear(this.id);"><i id="filts-6" class="glyphicon glyphicon-ok"></i>  Asadas</a></li>
+                                <hr>
+                                <li class="active"> <a id="filts2">Componentes</a></li>
+                        </ul>
+                </div>
 
                 
             </nav>

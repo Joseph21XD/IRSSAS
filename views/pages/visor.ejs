@@ -64,11 +64,27 @@
 
                 $("#divrisk").click(function(){
                      $("#divrisk").toggle("slow","linear");
+                     $("#buttonrisk").show();
                 });
 
                 $("#buttonrisk").click(function(){
                      $("#divrisk").toggle("slow","linear");
+                     $("#buttonrisk").hide();
                 });
+
+                $("#buttonrisk").hide();
+
+                $("#filts").click(function(){
+                     $("#menucomps").toggle("slow","linear");
+                     $("#menufilts").toggle("slow","linear");
+                });
+
+                $("#filts2").click(function(){
+                     $("#menucomps").toggle("slow","linear");
+                     $("#menufilts").toggle("slow","linear");
+                });
+
+                $("#menufilts").hide();
 
 
             });

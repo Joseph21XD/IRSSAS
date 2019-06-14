@@ -66,7 +66,7 @@ module.exports = {
         // execute query
         db.query(query, function(err, rows, fields) {
             if (!err){
-                res.render('pages/presentacionAsadas.ejs', {"asadas":rows, "usuario": req.session.usuario})
+                res.render('pages/presentacionAsadas.ejs', {"rows":[], "asadas":rows, "usuario": req.session.usuario})
             }
             else{
                 console.log('Error while performing Query.');

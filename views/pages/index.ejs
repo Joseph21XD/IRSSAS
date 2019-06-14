@@ -40,7 +40,7 @@
 
                     </div>
                     <p id="mycomponent">índice de Riesgo Sostenible en el Servicio de Agua y Saneamiento</p>
-                    <div id="map">
+                    <div id="map">                   
                     </div>
                     <div id="popup" class="ol-popup">
                         <a href="#" id="popup-closer" class="ol-popup-closer"></a>
@@ -141,11 +141,27 @@
 
                 $("#divrisk").click(function(){
                      $("#divrisk").toggle("slow","linear");
+                     $("#buttonrisk").show();
                 });
 
                 $("#buttonrisk").click(function(){
                      $("#divrisk").toggle("slow","linear");
+                     $("#buttonrisk").hide();
                 });
+
+                $("#buttonrisk").hide();
+
+                $("#filts").click(function(){
+                     $("#menucomps").toggle("slow","linear");
+                     $("#menufilts").toggle("slow","linear");
+                });
+
+                $("#filts2").click(function(){
+                     $("#menucomps").toggle("slow","linear");
+                     $("#menufilts").toggle("slow","linear");
+                });
+
+                $("#menufilts").hide();
 
 
             });
